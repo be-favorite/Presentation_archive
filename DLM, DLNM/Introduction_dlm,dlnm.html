@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="author" content="방태모" />
     <meta name="date" content="2021-06-21" />
-    <script src="libs/header-attrs-2.8/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.13/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -90,7 +90,7 @@ class: title-slide, center, middle
 * 1987-2000년까지 시카고의 **일별 사망자 수**를 **기온**을 예측변수( `\(X\)` )로 **DLNMs**을 이용해 모델링
 * **기온 및 지연에 따른 RR 값의 변화**를 표현한 그림:
   &lt;!-- + 과산포 포아송 분포를 가정 --&gt;
-&lt;img src="Introduction_dlm,dlnms_files/figure-html/unnamed-chunk-1-1.svg" width="30%" style="display: block; margin: auto;" /&gt;
+&lt;img src="Introduction_dlm,dlnm_files/figure-html/unnamed-chunk-1-1.svg" width="30%" style="display: block; margin: auto;" /&gt;
   + **RR**의 추정은 **21°C(reference value)**를 기준으로 이루어짐
   + **기온이 낮은** 경우 **2~3일의 지연효과(lag 2~3)**에서 사망의 RR이 피크에 도달
   + **기온이 높은** 경우 **지연 효과 없이 거의 즉시** 사망의 RR이 피크에 도달
@@ -99,19 +99,19 @@ class: title-slide, center, middle
 ---
 # 3 기대 결과
 * **predictor-specific(-20°C, 0°C, 27°C, 33°C) lag-response** 곡선
-&lt;img src="Introduction_dlm,dlnms_files/figure-html/unnamed-chunk-2-1.svg" width="40%" style="display: block; margin: auto;" /&gt;
+&lt;img src="Introduction_dlm,dlnm_files/figure-html/unnamed-chunk-2-1.svg" width="40%" style="display: block; margin: auto;" /&gt;
 
 ---
 # 3 기대 결과
 * **lag-specific(0, 5) predictor-response** 곡선
-&lt;img src="Introduction_dlm,dlnms_files/figure-html/unnamed-chunk-3-1.svg" width="40%" style="display: block; margin: auto;" /&gt;
+&lt;img src="Introduction_dlm,dlnm_files/figure-html/unnamed-chunk-3-1.svg" width="40%" style="display: block; margin: auto;" /&gt;
 
 ---
 # 3 기대 결과
 * **Overall cumulative association**
   + **lag 30까지의 지연효과**를 누적
   + 즉, 기온에 따른 **전반적인 상대위험도**를 나타냄
-&lt;img src="Introduction_dlm,dlnms_files/figure-html/unnamed-chunk-4-1.svg" width="40%" style="display: block; margin: auto;" /&gt;
+&lt;img src="Introduction_dlm,dlnm_files/figure-html/unnamed-chunk-4-1.svg" width="40%" style="display: block; margin: auto;" /&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
