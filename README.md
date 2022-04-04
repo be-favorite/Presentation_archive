@@ -2,7 +2,7 @@
 발표 자료를 아카이브합니다.
 
 ## Introduction to DLM and DLNM
-Distributed lag model과 해당 모형의 비선형으로의 확장인 Distributed lag non-linear model 소개
+Distributed lag model과 Distributed lag non-linear model 소개
 
 ### 이벤트 세부 사항
 **이벤트**: 질병관리청 발주 <빅데이터를 이용한 미세먼지 건강영향평가> 학술연구 과제 연구진 회의
