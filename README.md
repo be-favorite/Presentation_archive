@@ -11,8 +11,6 @@ Distributed lag model과 해당 모형의 비선형으로의 확장인 Distribut
 
 **장소**: Zoom
 
-### 키포인트
-
 ### 슬라이드
 R의 [{xaringan}](https://github.com/yihui/xaringan) 패키지로 제작되었습니다.
 - [HTML 형식](https://be-favorite.github.io/Presentation_archive/DLM%2C%20DLNM/Introduction_dlm%2Cdlnm.html)
