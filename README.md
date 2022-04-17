@@ -13,6 +13,6 @@ Distributed lag model과 Distributed lag non-linear model 소개
 
 ### 슬라이드
 R의 [{xaringan}](https://github.com/yihui/xaringan) 패키지로 제작되었습니다.
-- [HTML 형식](https://be-favorite.github.io/Presentation_archive/DLM%2C%20DLNM/Introduction_dlm%2Cdlnm.html)
-- [pdf 형식](https://be-favorite.github.io/Presentation_archive/DLM%2C%20DLNM/Introduction%20to%20DLM%20and%20DLNM.pdf)
+- 🔗 [HTML 형식](https://be-favorite.github.io/Presentation_archive/DLM%2C%20DLNM/Introduction_dlm%2Cdlnm.html)
+- 🔗 [pdf 형식](https://be-favorite.github.io/Presentation_archive/DLM%2C%20DLNM/Introduction%20to%20DLM%20and%20DLNM.pdf)
 
