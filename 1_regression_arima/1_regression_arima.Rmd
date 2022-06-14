@@ -99,7 +99,9 @@ class: inverse, middle, center
 
 - 데이터로부터 독립변수(또는 예측변수, $x$)들의 함수를 다음과 같이 추정하여 종속변수(또는 반응변수, $y$)를 예측하는 방법:
 
-\begin{align} \hat{y} = f(x_1, x_2, \cdots, x_p). \end{align}
+\begin{align} 
+\hat{y} = f(x_1, x_2, \cdots, x_p). 
+\end{align}
 
 - 여기서 $x = (x_1, x_2, \cdots, x_p)^{T}$는 주어지는 값
 
@@ -111,7 +113,9 @@ class: inverse, middle, center
 
 - 단순선형회귀(simple linear regression)는 예측변수와 종속변수가 모두 1개인 경우에 해당:
 
-\begin{align} y = \beta_0 + \beta_1 x + \epsilon, \epsilon \sim N(0, \sigma^2). \end{align}
+\begin{align} 
+y = \beta_0 + \beta_1 x + \epsilon, \epsilon \sim N(0, \sigma^2). 
+\end{align}
 
 - 오차항 $\epsilon_i \sim i.i.d \ N(0, \sigma^2)$ 에 관한 가정
 
@@ -120,8 +124,6 @@ class: inverse, middle, center
   - 독립성(Independent): ${\rm{Cov}}(\epsilon_{i}, \epsilon_{j}) = 0 (i \neq j)$
   
   - 등분산성(Homoscedasticity): ${\rm{Var}}(\epsilon_{i}) = \sigma^2$
-
-<!-- 식 (2)의 의미는 예측변수와 반응변수 간 선형관계가 성립한다고 전제될 때, 주어진 $x$에서 미지의 선형관계($\beta_0 + \beta_1 x$)로부터 오차($\epsilon)$가 더해져 관측값 $y$가 주어짐을 뜻함. -->
 
 ---
 # 단순회귀모형
@@ -142,7 +144,9 @@ knitr::include_graphics("./fig/simple.png")
 
 ]
 
-\begin{align} \hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x \end{align}
+\begin{align} 
+\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x 
+\end{align}
 
 ---
 
@@ -188,7 +192,7 @@ kable(head(cats, 4), format = "html")
 .pull-right[
 -   데이터 구조 확인
 ```{r}
-str(cats)
+glimpse(cats)
 ```
 ]
 
@@ -215,7 +219,7 @@ summary(lm_mod)
 
 ## 회귀선 시각화
 
-```{r simple, warning = FALSE, fig.height=4.5, fig.width=8, fig.retina = 2, fig.align = "center"}
+```{r, warning = FALSE, fig.height=4.5, fig.width=8, fig.retina = 2, fig.align = "center"}
 plot(cats$Hwt ~ cats$Bwt, pch = 19, col = "darkgray")
 abline(lm_mod, lwd = 2)
 ```
@@ -228,7 +232,7 @@ abline(lm_mod, lwd = 2)
 
 - $y$와 $x$ 간의 relationship에 관한 분석을 목적으로 선형회귀모형을 적합할 때는 잔차분석 필수
 
-```{r residual, warning = FALSE, fig.height=3.5, fig.width=8, fig.retina = 2, fig.align = "center"}
+```{r, warning = FALSE, fig.height=3.5, fig.width=8, fig.retina = 2, fig.align = "center"}
 par(mfrow = c(1, 2))
 plot(lm_mod, 1)
 plot(lm_mod, 2)
@@ -279,7 +283,9 @@ residuals(lm_mod) |>
 
 - 다중선형회귀(multiple linear regression)는 단순선형회귀의 확장으로 독립변수의 수가 여러개인 경우에 해당:
 
-\begin{align} y = \alpha + \beta_{1} x_1 + \beta_2 x_2 + \cdots + \beta_p x_p + \epsilon, \epsilon \sim N(0, \sigma^2) \end{align}
+\begin{align} 
+y = \alpha + \beta_{1} x_1 + \beta_2 x_2 + \cdots + \beta_p x_p + \epsilon, \epsilon \sim N(0, \sigma^2) 
+\end{align}
 
 - 오차항에 대한 가정은 단순선형회귀의 경우와 같음
 
@@ -291,13 +297,17 @@ residuals(lm_mod) |>
 knitr::include_graphics("./fig/multiple.jpg")
 ```
 
-\begin{align} \hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x_1 + \hat{\beta}_2 x_2 \end{align}
+\begin{align} 
+\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x_1 + \hat{\beta}_2 x_2 
+\end{align}
 
 ---
 
 # 다중회귀모형
 
-\begin{align} \boldsymbol{\beta} = (X^TX)^{-1}X^Ty \end{align}
+\begin{align} 
+\boldsymbol{\beta} = (X^TX)^{-1}X^Ty 
+\end{align}
 
 - 다중공선성 문제
   - 다중선형회귀에서는 자료의 수( $n$ )가 모수의 수( $p$ )보다 필히 많아야 함( $n \geq p+1$ )
@@ -362,7 +372,7 @@ glimpse(state.x77)
 # install.packages("janitor")
 state <- as.data.frame(state.x77) |> 
     janitor::clean_names()
-str(state)
+glimpse(state)
 ```
 
 ]
@@ -388,9 +398,12 @@ summary(lm_mod2)
 
 ## 다중공선성 검토: 분산팽창요인(VIF, Variance Inflation factor)
 
-\begin{align} {\rm{VIF}}_j = {{1}\over{1-R_j^2}} \end{align}
+\begin{align} 
+{\rm{VIF}}_j = \frac{1}{1-R_j^2}
+\end{align}
 
 .pull-left[
+
  - $R_j^2$는 $j$-번째 예측변수( $x_j$ )를 나머지 ( $p-1$ )개의 예측변수로 회귀를 수행하여 구해지는 결정계수
 
 - 10보다 큰 경우 다중공선성을 야기하는 변수로 간주
@@ -399,10 +412,12 @@ summary(lm_mod2)
 ]
 
 .pull-right[
+
 - {car} 패키지의 `vif()`를 이용해 구할 수 있음
 ```{r}
 vif(lm_mod2)
 ```
+
 ]
 
 ---
@@ -593,8 +608,7 @@ head(f, 3)
 f <- mod %>% 
     forecast(h = "15 months") %>% 
     hilo(level = c(80, 95)) %>% 
-    unpack_hilo(c("80%", "95%")) %>%   # 신뢰구간 값 열로 추출
-    mutate(Type = "모형 예측값")
+    unpack_hilo(c("80%", "95%"))
 head(f, 3) |> 
     knitr::kable("html")
 ```

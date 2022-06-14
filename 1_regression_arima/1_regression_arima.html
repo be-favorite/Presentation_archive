@@ -98,7 +98,9 @@ class: inverse, middle, center
 
 - 데이터로부터 독립변수(또는 예측변수, `\(x\)`)들의 함수를 다음과 같이 추정하여 종속변수(또는 반응변수, `\(y\)`)를 예측하는 방법:
 
-\begin{align} \hat{y} = f(x_1, x_2, \cdots, x_p). \end{align}
+\begin{align} 
+\hat{y} = f(x_1, x_2, \cdots, x_p). 
+\end{align}
 
 - 여기서 `\(x = (x_1, x_2, \cdots, x_p)^{T}\)`는 주어지는 값
 
@@ -110,7 +112,9 @@ class: inverse, middle, center
 
 - 단순선형회귀(simple linear regression)는 예측변수와 종속변수가 모두 1개인 경우에 해당:
 
-\begin{align} y = \beta_0 + \beta_1 x + \epsilon, \epsilon \sim N(0, \sigma^2). \end{align}
+\begin{align} 
+y = \beta_0 + \beta_1 x + \epsilon, \epsilon \sim N(0, \sigma^2). 
+\end{align}
 
 - 오차항 `\(\epsilon_i \sim i.i.d \ N(0, \sigma^2)\)` 에 관한 가정
 
@@ -119,8 +123,6 @@ class: inverse, middle, center
   - 독립성(Independent): `\({\rm{Cov}}(\epsilon_{i}, \epsilon_{j}) = 0 (i \neq j)\)`
   
   - 등분산성(Homoscedasticity): `\({\rm{Var}}(\epsilon_{i}) = \sigma^2\)`
-
-&lt;!-- 식 (2)의 의미는 예측변수와 반응변수 간 선형관계가 성립한다고 전제될 때, 주어진 `\(x\)`에서 미지의 선형관계($\beta_0 + \beta_1 x$)로부터 오차($\epsilon)$가 더해져 관측값 `\(y\)`가 주어짐을 뜻함. --&gt;
 
 ---
 # 단순회귀모형
@@ -143,7 +145,9 @@ class: inverse, middle, center
 
 ]
 
-\begin{align} \hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x \end{align}
+\begin{align} 
+\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x 
+\end{align}
 
 ---
 
@@ -221,14 +225,15 @@ head(cats, 4)
 -   데이터 구조 확인
 
 ```r
-str(cats)
+glimpse(cats)
 ```
 
 ```
-## 'data.frame':	144 obs. of  3 variables:
-##  $ Sex: Factor w/ 2 levels "F","M": 1 1 1 1 1 1 1 1 1 1 ...
-##  $ Bwt: num  2 2 2 2.1 2.1 2.1 2.1 2.1 2.1 2.1 ...
-##  $ Hwt: num  7 7.4 9.5 7.2 7.3 7.6 8.1 8.2 8.3 8.5 ...
+## Rows: 144
+## Columns: 3
+## $ Sex &lt;fct&gt; F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, …
+## $ Bwt &lt;dbl&gt; 2.0, 2.0, 2.0, 2.1, 2.1, 2.1, 2.1, 2.1, 2.1, 2.1, 2.1, 2.1, 2.2, 2…
+## $ Hwt &lt;dbl&gt; 7.0, 7.4, 9.5, 7.2, 7.3, 7.6, 8.1, 8.2, 8.3, 8.5, 8.7, 9.8, 7.1, 8…
 ```
 ]
 
@@ -283,7 +288,7 @@ plot(cats$Hwt ~ cats$Bwt, pch = 19, col = "darkgray")
 abline(lm_mod, lwd = 2)
 ```
 
-&lt;img src="1_회귀분석_ARIMA모형_files/figure-html/simple-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="1_regression_arima_files/figure-html/unnamed-chunk-9-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -300,7 +305,7 @@ plot(lm_mod, 1)
 plot(lm_mod, 2)
 ```
 
-&lt;img src="1_회귀분석_ARIMA모형_files/figure-html/residual-1.png" width="576" style="display: block; margin: auto;" /&gt;
+&lt;img src="1_regression_arima_files/figure-html/unnamed-chunk-10-1.png" width="576" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -372,7 +377,9 @@ residuals(lm_mod) |&gt;
 
 - 다중선형회귀(multiple linear regression)는 단순선형회귀의 확장으로 독립변수의 수가 여러개인 경우에 해당:
 
-\begin{align} y = \alpha + \beta_{1} x_1 + \beta_2 x_2 + \cdots + \beta_p x_p + \epsilon, \epsilon \sim N(0, \sigma^2) \end{align}
+\begin{align} 
+y = \alpha + \beta_{1} x_1 + \beta_2 x_2 + \cdots + \beta_p x_p + \epsilon, \epsilon \sim N(0, \sigma^2) 
+\end{align}
 
 - 오차항에 대한 가정은 단순선형회귀의 경우와 같음
 
@@ -385,13 +392,17 @@ residuals(lm_mod) |&gt;
 &lt;p class="caption"&gt;fig 3. Multilple linear regression&lt;/p&gt;
 &lt;/div&gt;
 
-\begin{align} \hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x_1 + \hat{\beta}_2 x_2 \end{align}
+\begin{align} 
+\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x_1 + \hat{\beta}_2 x_2 
+\end{align}
 
 ---
 
 # 다중회귀모형
 
-\begin{align} \boldsymbol{\beta} = (X^TX)^{-1}X^Ty \end{align}
+\begin{align} 
+\boldsymbol{\beta} = (X^TX)^{-1}X^Ty 
+\end{align}
 
 - 다중공선성 문제
   - 다중선형회귀에서는 자료의 수( `\(n\)` )가 모수의 수( `\(p\)` )보다 필히 많아야 함( `\(n \geq p+1\)` )
@@ -513,19 +524,20 @@ glimpse(state.x77)
 # install.packages("janitor")
 state &lt;- as.data.frame(state.x77) |&gt; 
     janitor::clean_names()
-str(state)
+glimpse(state)
 ```
 
 ```
-## 'data.frame':	50 obs. of  8 variables:
-##  $ population: num  3615 365 2212 2110 21198 ...
-##  $ income    : num  3624 6315 4530 3378 5114 ...
-##  $ illiteracy: num  2.1 1.5 1.8 1.9 1.1 0.7 1.1 0.9 1.3 2 ...
-##  $ life_exp  : num  69 69.3 70.5 70.7 71.7 ...
-##  $ murder    : num  15.1 11.3 7.8 10.1 10.3 6.8 3.1 6.2 10.7 13.9 ...
-##  $ hs_grad   : num  41.3 66.7 58.1 39.9 62.6 63.9 56 54.6 52.6 40.6 ...
-##  $ frost     : num  20 152 15 65 20 166 139 103 11 60 ...
-##  $ area      : num  50708 566432 113417 51945 156361 ...
+## Rows: 50
+## Columns: 8
+## $ population &lt;dbl&gt; 3615, 365, 2212, 2110, 21198, 2541, 3100, 579, 8277, 4931, …
+## $ income     &lt;dbl&gt; 3624, 6315, 4530, 3378, 5114, 4884, 5348, 4809, 4815, 4091,…
+## $ illiteracy &lt;dbl&gt; 2.1, 1.5, 1.8, 1.9, 1.1, 0.7, 1.1, 0.9, 1.3, 2.0, 1.9, 0.6,…
+## $ life_exp   &lt;dbl&gt; 69.05, 69.31, 70.55, 70.66, 71.71, 72.06, 72.48, 70.06, 70.…
+## $ murder     &lt;dbl&gt; 15.1, 11.3, 7.8, 10.1, 10.3, 6.8, 3.1, 6.2, 10.7, 13.9, 6.2…
+## $ hs_grad    &lt;dbl&gt; 41.3, 66.7, 58.1, 39.9, 62.6, 63.9, 56.0, 54.6, 52.6, 40.6,…
+## $ frost      &lt;dbl&gt; 20, 152, 15, 65, 20, 166, 139, 103, 11, 60, 0, 126, 127, 12…
+## $ area       &lt;dbl&gt; 50708, 566432, 113417, 51945, 156361, 103766, 4862, 1982, 5…
 ```
 
 ]
@@ -579,9 +591,12 @@ summary(lm_mod2)
 
 ## 다중공선성 검토: 분산팽창요인(VIF, Variance Inflation factor)
 
-\begin{align} {\rm{VIF}}_j = {{1}\over{1-R_j^2}} \end{align}
+\begin{align} 
+{\rm{VIF}}_j = \frac{1}{1-R_j^2}
+\end{align}
 
 .pull-left[
+
  - `\(R_j^2\)`는 `\(j\)`-번째 예측변수( `\(x_j\)` )를 나머지 ( `\(p-1\)` )개의 예측변수로 회귀를 수행하여 구해지는 결정계수
 
 - 10보다 큰 경우 다중공선성을 야기하는 변수로 간주
@@ -590,6 +605,7 @@ summary(lm_mod2)
 ]
 
 .pull-right[
+
 - {car} 패키지의 `vif()`를 이용해 구할 수 있음
 
 ```r
@@ -600,6 +616,7 @@ vif(lm_mod2)
 ## population     income illiteracy     murder    hs_grad      frost       area 
 ##   1.499915   1.992680   4.403151   2.616472   3.134887   2.358206   1.789764
 ```
+
 ]
 
 ---
@@ -949,7 +966,6 @@ head(f, 3)
    &lt;th style="text-align:right;"&gt; 80%_upper &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; 95%_lower &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; 95%_upper &lt;/th&gt;
-   &lt;th style="text-align:left;"&gt; Type &lt;/th&gt;
   &lt;/tr&gt;
  &lt;/thead&gt;
 &lt;tbody&gt;
@@ -964,7 +980,6 @@ head(f, 3)
    &lt;td style="text-align:right;"&gt; 113.9813 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 76.61202 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 121.8023 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 모형 예측값 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; Female &lt;/td&gt;
@@ -977,7 +992,6 @@ head(f, 3)
    &lt;td style="text-align:right;"&gt; 114.0114 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 76.56600 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 121.8483 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 모형 예측값 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; Female &lt;/td&gt;
@@ -990,7 +1004,6 @@ head(f, 3)
    &lt;td style="text-align:right;"&gt; 114.0414 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 76.52007 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 121.8942 &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; 모형 예측값 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -1069,7 +1082,7 @@ ggplot() +
 
 ## 시각화
 
-&lt;img src="1_회귀분석_ARIMA모형_files/figure-html/unnamed-chunk-35-1.png" width="1008" style="display: block; margin: auto;" /&gt;
+&lt;img src="1_regression_arima_files/figure-html/unnamed-chunk-37-1.png" width="1008" style="display: block; margin: auto;" /&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
