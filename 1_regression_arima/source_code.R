@@ -4,7 +4,7 @@
 library(MASS)
 library(car)
 head(cats, 4)
-str(cats)
+glimpse(cats)
 
 lm_mod <- lm(Hwt ~ Bwt, data = cats)
 summary(lm_mod)
@@ -29,7 +29,7 @@ glimpse(state.x77)
 # install.packages("janitor")
 state <- as.data.frame(state.x77) |> 
     janitor::clean_names()
-str(state)
+glimpse(state)
 
 lm_mod2 <- lm(life_exp ~ ., data = state)
 summary(lm_mod2)
