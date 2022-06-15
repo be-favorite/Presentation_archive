@@ -1,0 +1,69 @@
+---
+title: "통계실습 II. 생존분석"
+subtitle: "가천대 길병원 고급통계교육"
+author: "방태모"
+institute: "가천대 길병원 인공지능빅데이터융합센터"
+date: "2022-06-21"
+output:
+  xaringan::moon_reader:
+    css: 
+      - default
+      - css/statisticsplaybook.css
+      - css/statisticsplaybook-fonts.css
+    lib_dir: libs
+    seal: false
+    nature:
+      highlightStyle: googlecode
+      highlightLines: true
+      highlightLanguage: ["r"]
+      countIncrementalSlides: false
+      ratio: "16:9"
+      navigation:
+          scroll: false # disable slide transitions by scrolling
+    includes:
+      in_header: "assets/mathjax-equation-numbers.html"
+      after_body: [css/insert-logo.html]
+---
+
+```{r setup, include = FALSE}
+library(knitr)
+library(rmarkdown)
+xaringanExtra::use_panelset()
+xaringanExtra::use_clipboard()
+# set default options
+# opts_chunk$set(dpi = 300)
+```
+
+class: title-slide, left, bottom
+
+# `r rmarkdown::metadata$title`
+----
+## **`r rmarkdown::metadata$subtitle`**
+### `r rmarkdown::metadata$author`
+### `r rmarkdown::metadata$date`
+
+---
+
+# 목차
+
+.left-column[
+]
+.right-column[
+
+- .content-box-green[기초개념]
+  
+- .content-box-green[생존함수 추정 방법 I]
+
+  - Kaplan-Meier method
+  
+- .content-box-green[생존함수 추정 방법 II]
+  
+  - Log rank test
+  
+- .content-box-green[생존함수 추정 방법 III]
+
+  - Cox proportional hazard model
+  
+  - Time dependent Cox proportional hazard model
+  
+]
