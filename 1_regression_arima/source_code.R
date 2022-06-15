@@ -1,8 +1,10 @@
 # 1. 회귀분석: 단순회귀모형 -----------------------------------------------------------------
 # install.packages("MASS")
 # install.packages("car")
+# install.packages("dplyr")
 library(MASS)
 library(car)
+library(dplyr)
 head(cats, 4)
 glimpse(cats)
 
