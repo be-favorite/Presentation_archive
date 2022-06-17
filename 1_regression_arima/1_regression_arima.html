@@ -44,7 +44,7 @@ class: title-slide, left, bottom
 
 ---
 
-# 목차
+# .brand-red[목차]
 
 .left-column[
 ]
@@ -52,7 +52,7 @@ class: title-slide, left, bottom
 
 .pull-left[
 
-.font100[.content-box-green[1 회귀분석]]
+.font100[.content-box-red[1 회귀분석]]
   
   - 방법론 소개
   
@@ -70,7 +70,7 @@ class: title-slide, left, bottom
 
 .pull-right[
 
-.font100[.content-box-green[2 ARIMA 모형: 실제 사례 중심]]
+.font100[.content-box-red[2 ARIMA 모형: 실제 사례 중심]]
  
  - 준비
  
@@ -94,7 +94,7 @@ class: inverse, middle, center
 
 ---
 
-# 방법론 소개
+# .brand-red[방법론 소개]
 
 - 데이터로부터 독립변수(또는 예측변수, `\(x\)`)들의 함수를 다음과 같이 추정하여 종속변수(또는 반응변수, `\(y\)`)를 예측하는 방법:
 
@@ -108,7 +108,7 @@ class: inverse, middle, center
 
 ---
 
-# 단순회귀모형
+# .brand-red[단순회귀모형]
 
 - 단순선형회귀(simple linear regression)는 예측변수와 종속변수가 모두 1개인 경우에 해당:
 
@@ -125,7 +125,8 @@ y = \beta_0 + \beta_1 x + \epsilon, \epsilon \sim N(0, \sigma^2).
   - 등분산성(Homoscedasticity): `\({\rm{Var}}(\epsilon_{i}) = \sigma^2\)`
 
 ---
-# 단순회귀모형
+
+# .brand-red[단순회귀모형]
 
 .pull-left[
 
@@ -151,7 +152,7 @@ y = \beta_0 + \beta_1 x + \epsilon, \epsilon \sim N(0, \sigma^2).
 
 ---
 
-# 실습: 단순회귀모형
+# .brand-red[실습: 단순회귀모형]
 
 ## 준비하기
 
@@ -175,7 +176,7 @@ library(dplyr)
 
 ---
 
-# 실습: 단순회귀모형
+# .brand-red[실습: 단순회귀모형]
 
 ## 데이터 소개
 
@@ -239,7 +240,7 @@ glimpse(cats)
 
 ---
 
-# 실습: 단순회귀모형
+# .brand-red[실습: 단순회귀모형]
 
 ## 모형 적합
 
@@ -278,7 +279,7 @@ summary(lm_mod)
 
 ---
 
-# 실습: 단순회귀모형
+# .brand-red[실습: 단순회귀모형]
 
 ## 회귀선 시각화
 
@@ -292,7 +293,7 @@ abline(lm_mod, lwd = 2)
 
 ---
 
-# 실습: 단순회귀모형
+# .brand-red[실습: 단순회귀모형]
 
 ## 잔차분석: 등분산성, 정규성
 
@@ -309,7 +310,7 @@ plot(lm_mod, 2)
 
 ---
 
-# 실습: 단순회귀모형
+# .brand-red[실습: 단순회귀모형]
 
 ## 잔차분석: 이상점 체크
 
@@ -350,7 +351,7 @@ lm_mod$residuals[144]
 
 ---
 
-# 실습: 단순회귀모형
+# .brand-red[실습: 단순회귀모형]
 
 ## 잔차분석: 독립성 검정
 
@@ -373,7 +374,7 @@ residuals(lm_mod) |&gt;
 
 ---
 
-# 다중회귀모형
+# .brand-red[다중회귀모형]
 
 - 다중선형회귀(multiple linear regression)는 단순선형회귀의 확장으로 독립변수의 수가 여러개인 경우에 해당:
 
@@ -385,7 +386,7 @@ y = \alpha + \beta_{1} x_1 + \beta_2 x_2 + \cdots + \beta_p x_p + \epsilon, \eps
 
 ---
 
-# 다중회귀모형
+# .brand-red[다중회귀모형]
 
 &lt;div class="figure" style="text-align: center"&gt;
 &lt;img src="./fig/multiple.jpg" alt="fig 3. Multilple linear regression" width="500" height="350" /&gt;
@@ -398,7 +399,7 @@ y = \alpha + \beta_{1} x_1 + \beta_2 x_2 + \cdots + \beta_p x_p + \epsilon, \eps
 
 ---
 
-# 다중회귀모형
+# .brand-red[다중회귀모형]
 
 \begin{align} 
 \boldsymbol{\beta} = (X^TX)^{-1}X^Ty 
@@ -418,7 +419,7 @@ y = \alpha + \beta_{1} x_1 + \beta_2 x_2 + \cdots + \beta_p x_p + \epsilon, \eps
 
 ---
 
-# 다중회귀모형
+# .brand-red[다중회귀모형]
 
 - 다중공선성 문제 해결 방법
 
@@ -434,7 +435,7 @@ y = \alpha + \beta_{1} x_1 + \beta_2 x_2 + \cdots + \beta_p x_p + \epsilon, \eps
       
 ---
 
-# 실습: 다중회귀모형
+# .brand-red[실습: 다중회귀모형]
 
 ## 데이터 소개
 
@@ -499,7 +500,7 @@ head(state.x77, 3)
 
 ---
 
-# 실습: 다중회귀모형
+# .brand-red[실습: 다중회귀모형]
 
 ## 데이터 소개
 
@@ -544,7 +545,7 @@ glimpse(state)
 
 ---
 
-# 실습: 다중회귀모형
+# .brand-red[실습: 다중회귀모형]
 
 ## 모형 적합
 
@@ -587,7 +588,7 @@ summary(lm_mod2)
 
 ---
 
-# 실습: 다중회귀모형
+# .brand-red[실습: 다중회귀모형]
 
 ## 다중공선성 검토: 분산팽창요인(VIF, Variance Inflation factor)
 
@@ -621,7 +622,7 @@ vif(lm_mod2)
 
 ---
 
-# 실습: 다중회귀모형
+# .brand-red[실습: 다중회귀모형]
 
 .scroll-output[
 
@@ -664,7 +665,7 @@ summary(lm_mod3)
 
 ---
 
-# 실습: 다중회귀모형
+# .brand-red[실습: 다중회귀모형]
 
 .scroll-output[
 
@@ -702,7 +703,7 @@ class: inverse, middle, center
 
 ---
 
-## 준비
+# .brand-red[준비]
 
 .scroll-box-20[
 
@@ -735,7 +736,7 @@ ggplot2::theme_set(theme_bw())
 
 ---
 
-## 준비
+# .brand-red[준비]
 
 .scroll-output[
 
@@ -830,7 +831,7 @@ disease2
 
 ---
 
-## 시계열 자료 다루기
+# .brand-red[시계열 자료 다루기]
 
 .scroll-output[
 
@@ -868,7 +869,7 @@ disease3
 
 ---
 
-## 시계열 자료 다루기
+# .brand-red[시계열 자료 다루기]
 
 .scroll-output[
 
@@ -905,7 +906,7 @@ disease4
 
 ---
 
-## 모형 적합
+# .brand-red[모형 적합]
 
 .scroll-output[
 
@@ -937,7 +938,7 @@ mod
 
 ---
 
-## 예측
+# .brand-red[예측]
 
 .scroll-output[
 
@@ -1012,7 +1013,7 @@ head(f, 3)
 
 ---
 
-## 시각화
+# .brand-red[시각화]
 
 - 과거 시점(2010년 1월 - 2021년 9월)의 자료 만들기
 
@@ -1033,7 +1034,7 @@ historic &lt;- bind_rows(
 
 ---
 
-## 시각화
+# .brand-red[시각화]
 
 - 미래 시점(2021년 10월 - 2022년 12월)의 자료 만들기
 
@@ -1047,7 +1048,7 @@ fore &lt;- f %&gt;%
 
 ---
 
-## 시각화
+# .brand-red[시각화]
 
 .scroll-output[
 
@@ -1080,7 +1081,7 @@ ggplot() +
 
 ---
 
-## 시각화
+# .brand-red[시각화]
 
 &lt;img src="1_regression_arima_files/figure-html/unnamed-chunk-37-1.png" width="1008" style="display: block; margin: auto;" /&gt;
     </textarea>
