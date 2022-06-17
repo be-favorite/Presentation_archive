@@ -5,13 +5,13 @@
     <meta charset="utf-8" />
     <meta name="author" content="방태모" />
     <meta name="date" content="2022-06-21" />
-    <script src="libs/header-attrs-2.14/header-attrs.js"></script>
-    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="libs/panelset-0.2.6/panelset.css" rel="stylesheet" />
-    <script src="libs/panelset-0.2.6/panelset.js"></script>
-    <script src="libs/clipboard-2.0.6/clipboard.min.js"></script>
-    <link href="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
-    <script src="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/clipboard/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.js"></script>
     <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
     <script type="text/x-mathjax-config">
       MathJax.Hub.Config({
@@ -44,29 +44,1791 @@ class: title-slide, left, bottom
 
 ---
 
-# 목차
+# .green[목차]
 
 .left-column[
 ]
 .right-column[
 
-- .content-box-green[기초개념]
+ - .content-box-green[기초개념]
   
-- .content-box-green[생존함수 추정 방법 I]
+- .content-box-green[생존 함수 추정]
 
   - Kaplan-Meier method
+  - 실습
   
-- .content-box-green[생존함수 추정 방법 II]
+- .content-box-green[생존 함수 비교]
   
   - Log rank test
+  - 실습
   
-- .content-box-green[생존함수 추정 방법 III]
+- .content-box-green[위험인자 분석]
 
   - Cox proportional hazard model
-  
   - Time dependent Cox proportional hazard model
+  - 실습
+  
   
 ]
+
+---
+
+class: inverse, middle, center
+
+# 기초개념
+
+---
+
+## .green[생존 분석]
+
+- 생존자료(survival data)를 분석하는 통계적 방법
+
+## .green[생존 자료]
+
+- 관심 사건의 발생 여부(이진형 변수)와 생존시간(연속형 변수)을 관측한 자료
+
+&lt;!-- 사망, 질병 발생/재발/호전, 금연, 퇴사 --&gt;
+
+  - 생존자료는 사건-시간 자료(time-to-event data)라 표현하기도 함
+  - 실제 생존 시간(true survival time, .red[T]) = 추적 시작 시점 ~ 사건 발생 지점
+
+&lt;!-- 단위: days, weeks, months, years --&gt;
+
+- 생존 자료의 가장 큰 특징: 중도 절단(censored)
+
+  - 중도 절단 시간 (censoring time, .green[C])
+      - 연구기간 내 사건 미발생 시 마지막 추적 시점까지의 시간
+  
+  - 관측 생존 시간 (observed survival time) = min(.red[T], .green[C])
+      - 연구기간 내 생존 시간 또는 중도 절단 시간까지의 시간
+      
+&lt;!-- 즉, 관측 생존 시간 `\(\neq\)` 실제 생존 시간 --&gt;
+
+---
+
+## .green[생존 자료의 특징]
+
+.pull-left[
+ - 생존 시간은 정규분포를 따르지 않음
+
+  - 항상 양의 값
+  - 매우 치우친 분포
+  
+- 중도 절단
+  - Type I censoring
+  - Type II censoring
+  - Type III censoring
+      - 연구종료
+      - loss to follow up
+      - drop out
+     
+   &lt;!-- 중도절단시간 고정 --&gt;
+  &lt;!-- 관측 사망자수 사전 설정 --&gt;
+  &lt;!-- 임의중도절단 --&gt;
+  
+- 이진형 변수와 연속형 변수를 다루어야 함
+  - .green[생존 분석] 필요
+]
+
+.pull-right[
+&lt;div class="figure"&gt;
+&lt;img src="./fig/example.png" alt="fig 1. Survival data (Jim Gruman)" width="750" height="450" /&gt;
+&lt;p class="caption"&gt;fig 1. Survival data (Jim Gruman)&lt;/p&gt;
+&lt;/div&gt;
+]
+
+&lt;!-- right censored - 사건 발생을 관측하지 못한 경우 (연구 종료) --&gt;
+&lt;!-- left censored - 추적 시작 시점을 관측하지 못한 경우 (아주 드문 형태) --&gt;
+&lt;!-- interval censored - 연구 기간 중 일부를 관측하지 못한 경우 (아주 드문 형태) --&gt;
+
+---
+
+## .green[생존 분석의 목적]
+
+.left-column[
+
+]
+.right-column[
+
+- 추정(estimation)
+
+  - 생존시간의 분포에 관한 정보
+  - .green[Kaplan-Meier Method]
+
+- 그룹간 비교(group comparison)
+
+  - 실험군과 대조군이 있는 경우 두 처리군의 생존 분포 비교
+  - .green[Log-rank test]
+  
+- 위험인자 분석(risk-factor analysis)
+
+  - 유의한 예후인자(prognostic factor) 파악
+  - .green[Cox ph model]
+  - .green[Time dependent Cox ph model]
+
+]
+
+---
+
+class: inverse, middle, center
+
+# 생존 함수 추정
+
+## Kaplan-Meier method
+
+---
+
+## .green[생존 함수 S(t)]
+
+.pull-left[
+
+`\begin{align}
+S(t) = Pr(T &gt; t)
+\end{align}`
+
+- 관심사건이 `\(t\)` 시점까지 일어나지 않을 확률
+
+  - 관심사건: 사망
+  - 환자가 `\(t\)`시간 이상 생존할 확률
+
+- `\(S(t)\)`: 생존율, 생존 곡선
+
+- `\(F(t) = 1 - S(t)\)`: 누적 발생률
+
+&lt;!-- 생존율(survival rate), 생존곡선(surviaval curve) --&gt;
+&lt;!-- 누적 발생률(cumulative incidence rate) --&gt;
+
+- e.g. `\(S(10)\)` = 0.1 ( `\(t\)` in years)
+
+  - 10년 생존율 = `\(S(10)\)` = 10%
+  - 10년 누적 사망률 = `\(F(10)\)` = 90%
+
+]
+
+.pull-right[
+
+&lt;div class="figure"&gt;
+&lt;img src="./fig/survival_function.png" alt="fig 2. Survival function (Wikipedia)" width="450" height="450" /&gt;
+&lt;p class="caption"&gt;fig 2. Survival function (Wikipedia)&lt;/p&gt;
+&lt;/div&gt;
+
+]
+
+---
+
+## .green[Kaplan-Meier method]
+
+.pull-left[
+ - 생존함수를 추정하는 대표적인 비모수적 방법론:
+
+`\begin{align}
+\hat{S}(t_j) = \prod_{i=1}^{j}(1- \frac{d_i}{n_i})^{\delta_i}
+\end{align}`
+
+- `\(t_j\)`: `\(j\)`-번째 사망 시간
+
+- `\(d_i\)`: `\(t_i\)` 시점 사망자 수
+
+- `\(n_i\)`: `\(t_i\)` 시점 바로 직전 사망자 수
+
+- `\(\delta_i\)`: 중도절단여부(중도절단 = 0, 아니면 1)
+
+- 즉, 사건 발생 시점에서만 생존율 변화
+
+]
+
+.pull-right[
+
+&lt;div class="figure"&gt;
+&lt;img src="./fig/km_method.png" alt="fig 3. KM method (Jim Gruman)" width="550" height="300" /&gt;
+&lt;p class="caption"&gt;fig 3. KM method (Jim Gruman)&lt;/p&gt;
+&lt;/div&gt;
+
+]
+
+---
+
+## .green[실습 - Kaplan-Meier method]
+
+.scroll-output[
+
+### .black[패키지 설치]
+
+```r
+install.packages("dplyr")
+install.packages("survival")
+install.packages("survminer")
+```
+
+### .black[패키지 로딩]
+
+```r
+library(dplyr)
+library(survival)
+library(survminer)
+```
+
+### .black[데이터 소개]
+
+- 228명 말기 암환자들의 생존 시간(`time`), 사망 여부(`status`) 데이터
+- 1022일간 추적 연구(follow-up study)
+
+
+```r
+glimpse(lung)
+```
+
+```
+## Rows: 228
+## Columns: 10
+## $ inst      &lt;dbl&gt; 3, 3, 3, 5, 1, 12, 7, 11, 1, 7, 6, 16, 11, …
+## $ time      &lt;dbl&gt; 306, 455, 1010, 210, 883, 1022, 310, 361, 2…
+## $ status    &lt;dbl&gt; 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2…
+## $ age       &lt;dbl&gt; 74, 68, 56, 57, 60, 74, 68, 71, 53, 61, 57,…
+## $ sex       &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 2, 2, 1, 1…
+## $ ph.ecog   &lt;dbl&gt; 1, 0, 0, 1, 0, 1, 2, 2, 1, 2, 1, 2, 1, NA, …
+## $ ph.karno  &lt;dbl&gt; 90, 90, 90, 90, 100, 50, 70, 60, 70, 70, 80…
+## $ pat.karno &lt;dbl&gt; 100, 90, 90, 60, 90, 80, 60, 80, 80, 70, 80…
+## $ meal.cal  &lt;dbl&gt; 1175, 1225, NA, 1150, NA, 513, 384, 538, 82…
+## $ wt.loss   &lt;dbl&gt; NA, 15, 15, 11, 0, 0, 10, 1, 16, 34, 27, 23…
+```
+]
+
+---
+
+## .green[실습 - Kaplan-Meier method]
+
+.scroll-output[
+
+### .black[생존 자료 객체 만들기]
+
+
+```r
+surv_lung &lt;- Surv(lung$time, lung$status)[1:10]
+head(surv_lung)
+```
+
+```
+## [1]  306   455  1010+  210   883  1022+
+```
+
+### .black[Kaplan-Meier method을 이용한 생존 곡선 추정]
+
+
+```r
+method_km &lt;- survfit(Surv(time, status) ~ 1, data = lung)
+glimpse(method_km)
+```
+
+```
+## List of 16
+##  $ n        : int 228
+##  $ time     : num [1:186] 5 11 12 13 15 26 30 31 53 54 ...
+##  $ n.risk   : num [1:186] 228 227 224 223 221 220 219 218 217 215 ...
+##  $ n.event  : num [1:186] 1 3 1 2 1 1 1 1 2 1 ...
+##  $ n.censor : num [1:186] 0 0 0 0 0 0 0 0 0 0 ...
+##  $ surv     : num [1:186] 0.996 0.982 0.978 0.969 0.965 ...
+##  $ std.err  : num [1:186] 0.0044 0.00885 0.00992 0.01179 0.01263 ...
+##  $ cumhaz   : num [1:186] 0.00439 0.0176 0.02207 0.03103 0.03556 ...
+##  $ std.chaz : num [1:186] 0.00439 0.0088 0.00987 0.01173 0.01257 ...
+##  $ type     : chr "right"
+##  $ logse    : logi TRUE
+##  $ conf.int : num 0.95
+##  $ conf.type: chr "log"
+##  $ lower    : num [1:186] 0.987 0.966 0.959 0.947 0.941 ...
+##  $ upper    : num [1:186] 1 1 0.997 0.992 0.989 ...
+##  $ call     : language survfit(formula = Surv(time, status) ~ 1, data = lung)
+##  - attr(*, "class")= chr "survfit"
+```
+
+- `time`: unique한 생존 기간 및 중도 절단 기간
+
+- `n.event`: 해당 기간의 관심사건 발생 수
+
+- `surv`: 각 `time`의 생존율
+
+]
+
+---
+
+## .green[실습 - Kaplan-Meier method]
+
+### .black[Kaplan-Meier plot 시각화]
+
+- {survminer} 패키지의 `ggsurvplot()` 이용
+- 🔗 [cheatsheet](https://rpkgs.datanovia.com/survminer/survminer_cheatsheet.pdf)
+
+
+```r
+ggsurvplot(method_km,  xlab = "Days", ylab = "Overall survival probability")
+```
+
+&lt;img src="2_survival_files/figure-html/unnamed-chunk-9-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+&lt;!-- 그래프의 tick 마크는 censored를 나타냄 --&gt;
+
+---
+
+## .green[실습 - Kaplan-Meier method]
+
+### .black[1년 생존율 추정하기]
+
+.scroll-box-20[
+
+ - 추정된 KM curve에 의하면 말기 암환자의 추정된 1년 생존율은 41%에 해당:
+
+
+```r
+summary(method_km, times = 365.25)
+```
+
+```
+## Call: survfit(formula = Surv(time, status) ~ 1, data = lung)
+## 
+##  time n.risk n.event survival std.err lower 95% CI
+##   365     65     121    0.409  0.0358        0.345
+##  upper 95% CI
+##         0.486
+```
+
+- censoring 고려없이 해당 시점의 사망자 수만 고려하여 생존율을 계산하면 생존율이 과대추정됨:
+
+`\begin{align}
+(1-\frac{121}{228}) \times 100 = 47 \%
+\end{align}`
+
+- 해당 시점에는 42명의 censored된 환자가 존재하고, 이를 반영하여 KM method에 의해 더 정확하게 추정된 생존율은 41%에 해당
+
+]
+
+
+---
+
+## .green[실습 - Kaplan-Meier method]
+
+### .black[1년 생존율 추정하기 - 시각화]
+
+- Number at risk: 해당 시점의 생존자 수
+
+&lt;img src="2_survival_files/figure-html/unnamed-chunk-11-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+- 총 환자 수 228명 - 사망 121명 - 중도절단 42명 = 65명 생존 (1년 생존자 수)
+
+---
+
+## .green[실습 - Kaplan-Meier method]
+
+### .black[1년 생존율 추정하기 - 시각화 코드]
+
+.scroll-box-20[
+
+
+```r
+plot_main &lt;- 
+  ggsurvplot(
+    data = lung, 
+    fit = method_km,
+    xlab = "Months",
+    legend = "none",
+    xscale = 30.4,
+    break.x.by = 182.4, 
+    risk.table = TRUE,
+    risk.table.y.text = FALSE)
+plot1 &lt;- plot_main
+plot1$plot &lt;- plot1$plot + 
+  geom_segment(x = 365.25, xend = 365.25, y = -0.05, yend = 0.4092416, 
+               size = 1.5) +
+  geom_segment(x = 365.25, xend = -40, y = 0.4092416, yend = 0.4092416,
+               size = 1.5, 
+               arrow = arrow(length = unit(0.2, "inches"))) 
+```
+
+]
+
+---
+
+## .green[실습 - Kaplan-Meier method]
+
+.pull-left[
+### .black[중위 생존시간 추정]
+
+```r
+method_km
+```
+
+```
+## Call: survfit(formula = Surv(time, status) ~ 1, data = lung)
+## 
+##        n events median 0.95LCL 0.95UCL
+## [1,] 228    165    310     285     363
+```
+
+- 말기 암환자 중위 생존시간: 310일
+
+]
+
+.pull-right[
+
+### .black[중위 생존시간 추정 - 시각화]
+&lt;img src="2_survival_files/figure-html/unnamed-chunk-14-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+---
+
+## .green[실습 - Kaplan-Meier method]
+
+### .black[중위생존시간 - 시각화 코드]
+
+
+```r
+plot2 &lt;- plot_main
+plot2$plot &lt;- plot2$plot + 
+  geom_segment(x = -45, xend = 310, y = 0.5, yend = 0.5,  size = 1.5) +
+  geom_segment(x = 310, xend = 310, y = 0.5, yend = -0.03, size = 1.5, 
+               arrow = arrow(length = unit(0.2, "inches")))
+plot2
+```
+
+---
+
+class: inverse, middle, center
+
+# 생존 함수 비교
+
+## Log-rank test
+
+---
+
+## .green[Log-rank test]
+
+.pull-left[
+
+ - 그룹 간 생존 곡선을 비교하는 대표적인 비모수 검정 방법
+
+- 두 그룹 간 생존 함수에 차이가 있는지 살펴보고자 함
+
+- 가설
+
+$$
+H_0: S_1(t) = S_2(t) \\
+H_1: S_1(t) \neq S_2(t)
+$$
+
+]
+
+.pull-right[
+&lt;div class="figure"&gt;
+&lt;img src="./fig/log-rank.png" alt="fig 4. Log-rank test" width="624" height="500" /&gt;
+&lt;p class="caption"&gt;fig 4. Log-rank test&lt;/p&gt;
+&lt;/div&gt;
+]
+
+---
+
+## .green[실습 - Log-rank test]
+
+- 앞서 이용한 패키지 {survival}, {survminer} 그대로 이용
+
+- KM method를 통해 추정한 말기 암환자들의 생존 곡선을 성별 그룹에따라 비교
+
+
+```r
+method_km2 &lt;- survfit(Surv(time, status) ~ sex, data = lung)
+method_km2
+```
+
+```
+## Call: survfit(formula = Surv(time, status) ~ sex, data = lung)
+## 
+##         n events median 0.95LCL 0.95UCL
+## sex=1 138    112    270     212     310
+## sex=2  90     53    426     348     550
+```
+
+- 중위생존시간은 여성이 훨씬 김
+
+---
+
+## .green[실습 - Log-rank test]
+
+### .black[시각화]
+
+.pull-left[
+
+```r
+ggsurvplot(method_km2, 
+           pval = TRUE, conf.int = TRUE,
+           risk.table = TRUE, # Add risk table
+           risk.table.col = "strata", # Change risk table color by groups
+           linetype = "strata", # Change line type by groups
+           surv.median.line = "hv", # Specify median survival
+           ggtheme = theme_bw(), # Change ggplot2 theme
+           palette = c("#E7B800", "#2E9FDF"))
+```
+
+- 두 점선은 각 그룹의 중위생존시간을 의미
+
+- `\(p &lt; 0.01\)`
+
+]
+
+.pull-right[
+&lt;img src="2_survival_files/figure-html/unnamed-chunk-19-1.png" width="504" style="display: block; margin: auto;" /&gt;
+  
+]
+
+&lt;!-- https://ticket.interpark.com/Ticket/Goods/TPBridge.asp?GoodsCode=22006468 --&gt;
+
+---
+
+class: inverse, middle, center
+
+# 위험인자 분석
+
+## Cox proportional hazard model
+
+## Time dependent Cox proportional hazard model
+
+---
+
+## .green[위험함수] h(t)
+
+`\begin{align}
+h(t) = \lim_{dt\to0} P(t &lt; T \leq t+dt)
+\end{align}`
+
+- 환자가 `\(t\)` 시점까지 생존했다가 `\(t\)` 시점 바로 직후에 사망하게 되는 순간 위험률
+
+
+## .green[Cox ph model]
+- 생존 자료에 대한 대표적인 준모수적 회귀 분석 방법론
+  
+  - Cox regression 이라고도 부름
+
+- 비례 위험 가정 (proportinal hazard assumption)
+
+ - 각 설명변수의 효과는 시간에 관계없이 일정
+ 
+`\begin{align}
+h(t) = h_0(t){\rm{exp}}(\beta_1x_1 + \beta_2x_2 + \cdots + \beta_kx_k)
+\end{align}`
+`\begin{align}
+h_0(t) = \rm{exp}(\beta_0): \rm{baseline \ hazard}
+\end{align}`
+
+---
+
+## .green[Cox ph model]
+
+&lt;!-- 연속형의 경우 분자 x+1, 분모 x --&gt;
+
+- 위험비 HR (Hazard ratio)
+
+  - 다른 설명변수들의 값이 고정되어 있을 때, `\(x_k\)`의 효과
+  - 시간에 대해 상수이므로 `\(x_k\)`에 대해서만 비례하여(proportional) 증가
+  - 즉, `\(x_k\)`가 한 단위 증가 시 사건 발생 위험은 `\({\rm{exp}}(\beta_k)\)`배가 됨
+  
+`\begin{align}
+{\rm{HR}}_k = \frac{h(t|X_k = 1)}{h(t|X_k = 0)} = \frac{h_0(t){\rm{exp}}(\beta_1x_1 + \cdots + \beta_kx_k)}{h_0(t){\rm{exp}}(\beta_1x_1 +  \cdots \beta_{k-1}x_{k-1})} = {\rm{exp}}(\beta_k)
+\end{align}`
+
+- Cox ph model은 생존 자료에서 다른 변수들의 효과를 보정한, treatment 효과를 볼 수 있는 가장 대표적인 통계 모형에 해당
+
+- Crude HR: Univariable Cox ph model에서 구한 HR
+
+- Adjusted HR: Multivariable Cox ph model에서 구한 HR
+
+---
+
+## .green[비례위험가정 검토]
+
+.left-column[
+]
+.right-column[
+
+- Schoenfeld test
+  
+  - Schoenfeld residuals와 시간 `\(t\)` 간에 어떤 패턴이 존재하는가?
+  
+  - 시간을 설명변수, 잔차를 종속변수로 두고 단순회귀분석을를 수행하는 개념
+  
+  - 설명변수별로 검토
+  
+  - 귀무가설( `\(H_0\)` ): 잔차와 시간 간 패턴이 존재하지 않음
+  
+  - 즉, 귀무가설을 기각할 수 없다면 비례위험가정을 만족함
+
+]
+
+---
+
+## .green[실습 - Cox ph model]
+
+### .black[모형 적합]
+
+.scroll-box-20[
+
+- {survival} 패키지의 `coxph()`를 이용해 univariable cox ph model 적합
+
+
+```r
+mod_cox &lt;- coxph(Surv(time, status) ~ sex, data = lung)
+mod_cox
+```
+
+```
+## Call:
+## coxph(formula = Surv(time, status) ~ sex, data = lung)
+## 
+##        coef exp(coef) se(coef)      z       p
+## sex -0.5310    0.5880   0.1672 -3.176 0.00149
+## 
+## Likelihood ratio test=10.63  on 1 df, p=0.001111
+## n= 228, number of events= 165
+```
+
+- 적합 결과 tidy하게 출력하기:
+
+
+```r
+install.packages("broom")
+broom::tidy(mod_cox, exp = TRUE)
+```
+
+
+|term |  estimate| std.error| statistic|   p.value|
+|:----|---------:|---------:|---------:|---------:|
+|sex  | 0.5880028| 0.1671786| -3.176385| 0.0014912|
+
+- {gtsummary}를 이용하여 또 다른 형식으로도 출력이 가능함:
+
+
+```r
+install.packages("gtsummary")
+gtsummary::tbl_regression(mod_cox, exp = TRUE)
+```
+
+<div id="ebovffviwz" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#ebovffviwz .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#ebovffviwz .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ebovffviwz .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#ebovffviwz .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#ebovffviwz .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ebovffviwz .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ebovffviwz .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#ebovffviwz .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#ebovffviwz .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#ebovffviwz .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#ebovffviwz .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#ebovffviwz .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#ebovffviwz .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#ebovffviwz .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#ebovffviwz .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#ebovffviwz .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#ebovffviwz .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ebovffviwz .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#ebovffviwz .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#ebovffviwz .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ebovffviwz .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#ebovffviwz .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#ebovffviwz .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ebovffviwz .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ebovffviwz .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#ebovffviwz .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#ebovffviwz .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ebovffviwz .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ebovffviwz .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ebovffviwz .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ebovffviwz .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ebovffviwz .gt_left {
+  text-align: left;
+}
+
+#ebovffviwz .gt_center {
+  text-align: center;
+}
+
+#ebovffviwz .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#ebovffviwz .gt_font_normal {
+  font-weight: normal;
+}
+
+#ebovffviwz .gt_font_bold {
+  font-weight: bold;
+}
+
+#ebovffviwz .gt_font_italic {
+  font-style: italic;
+}
+
+#ebovffviwz .gt_super {
+  font-size: 65%;
+}
+
+#ebovffviwz .gt_two_val_uncert {
+  display: inline-block;
+  line-height: 1em;
+  text-align: right;
+  font-size: 60%;
+  vertical-align: -0.25em;
+  margin-left: 0.1em;
+}
+
+#ebovffviwz .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#ebovffviwz .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#ebovffviwz .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#ebovffviwz .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+#ebovffviwz .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>HR</strong><sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>95% CI</strong><sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>p-value</strong></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_left">sex</td>
+<td class="gt_row gt_center">0.59</td>
+<td class="gt_row gt_center">0.42, 0.82</td>
+<td class="gt_row gt_center">0.001</td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="4"><sup class="gt_footnote_marks">1</sup> HR = Hazard Ratio, CI = Confidence Interval</td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+
+]
+
+---
+
+## .green[실습 - Cox ph model]
+
+### .black[비례위험가정 검토]
+
+.pull-left[
+ - `cox.zph()` 함수를 이용하면 비례위험가정 검토를 손쉽게 수행할 수 있음
+
+- `sex`의 경우 비례위험가정을 만족한다고 볼 수 있음
+
+
+```r
+mod_cox |&gt; 
+    cox.zph() |&gt; 
+    ggcoxzph()
+```
+]
+
+.pull-right[
+&lt;img src="2_survival_files/figure-html/unnamed-chunk-26-1.png" width="504" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+## .green[실습 - Cox ph model]
+
+### .black[누적 위험 시각화]
+
+.pull-left[
+
+
+```r
+mod_hr &lt;- survfit(Surv(time, status) ~ sex, data = lung)
+ggsurvplot(data = lung, 
+           fit = mod_hr,
+           xlab = "Months",
+           xscale = 30.4,
+           break.x.by = 182.4,
+           fun = "cumhaz",
+           legend.title = "",
+           legend.labs = c("Male", "Female"),
+           legend = "bottom", 
+           risk.table = TRUE,
+           risk.table.y.text = FALSE)
+```
+
+]
+
+.pull-right[
+
+&lt;img src="2_survival_files/figure-html/unnamed-chunk-28-1.png" width="504" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+## .green[Time dependent Cox ph model]
+
+- Cox ph model의 비례위험가정 위배시 고려해야하는 모형
+
+- 편의상 1개의 설명변수를 갖는다고 가정
+
+`\begin{align}
+h(t) = h_0(t){\rm{exp}}(\beta_1x + \beta_2xt)
+\end{align}`
+
+- Time dependent hazard ratio
+
+`\begin{align}
+{\rm{HR}}(t) = \frac{h(t|X=x+1)}{h(t|X=x)} = \frac{{\rm{exp}}(\beta_1(x+1)+\beta_2((x+1)t)}{{\rm{exp}}(\beta_1x+\beta_2(xt))} \newline = {\rm{exp}}(\beta_1 + \beta_2t) \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \
+\end{align}`
+
+- `\(x\)`가 한단위 증가시 HR은 `\({\rm{exp}}(\beta_1+\beta_2t)\)`배가 됨
+
+- 즉, Time dependent Cox ph model의 위험비는 `\(x\)` 뿐만이 아닌 시간에도 depend
+
+---
+
+## .green[실습 - Time dependent Cox ph model]
+
+### .black[데이터 불러오기]
+
+.scroll-box-20[
+
+- {SemiCompRisks} 패키지의 137명의 골수 이식 환자 데이터 `BMT` 이용
+
+
+```r
+install.packages("SemiCompRisks")
+data(BMT, package = "SemiCompRisks")
+glimpse(BMT)
+```
+
+
+```
+## Rows: 137
+## Columns: 22
+## $ g      &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+## $ T1     &lt;int&gt; 2081, 1602, 1496, 1462, 1433, 1377, 1330, 996,…
+## $ T2     &lt;int&gt; 2081, 1602, 1496, 1462, 1433, 1377, 1330, 996,…
+## $ delta1 &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1…
+## $ delta2 &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1…
+## $ delta3 &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1…
+## $ TA     &lt;int&gt; 67, 1602, 1496, 70, 1433, 1377, 1330, 72, 226,…
+## $ deltaA &lt;int&gt; 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0…
+## $ TC     &lt;int&gt; 121, 139, 307, 95, 236, 123, 96, 121, 226, 91,…
+## $ deltaC &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0…
+## $ TP     &lt;int&gt; 13, 18, 12, 13, 12, 12, 17, 12, 10, 29, 22, 34…
+## $ deltaP &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1…
+## $ Z1     &lt;int&gt; 26, 21, 26, 17, 32, 22, 20, 22, 18, 24, 19, 17…
+## $ Z2     &lt;int&gt; 33, 37, 35, 21, 36, 31, 17, 24, 21, 40, 28, 28…
+## $ Z3     &lt;int&gt; 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1…
+## $ Z4     &lt;int&gt; 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1…
+## $ Z5     &lt;int&gt; 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0…
+## $ Z6     &lt;int&gt; 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0…
+## $ Z7     &lt;int&gt; 98, 1720, 127, 168, 93, 2187, 1006, 1319, 208,…
+## $ Z8     &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+## $ Z9     &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 2, 2, 1, 1…
+## $ Z10    &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0…
+```
+
+- `T1`: 사망 또는 last follow-up까지 기간 (단위: 일)
+- `delta1`: 사망 여부(1: 사망, 0: 생존)
+- `TA`: aGVHD(acture graft-versus-host disease) 발생 기간 (단위: 일)
+- `deltaA`: aGVHD 발생 여부(1: 발생, 0:발생X)
+
+]
+---
+
+## .green[실습 - Time dependent Cox ph model]
+
+### .black[전처리]
+
+.scroll-box-20[
+
+- aGVHD 여부를 Time depentent covariate으로 모형 적합을 수행할 예정
+
+- R에서 Time dependent Cox ph의 적합에는 특별한 형태의 데이터를 요구함
+
+  - 1 행 번호 생성
+  - 2 `tmerge()` 이용 특별한 형태의 데이터 생성
+
+
+```r
+install.packages("tibble")
+bmt2 &lt;- BMT2 |&gt; 
+    tibble::rowid_to_column("my_id")
+bmt_time &lt;- tmerge(
+    data1 = bmt2 |&gt; select(my_id, T1, delta1), 
+    data2 = bmt2, 
+    id = my_id, 
+    death = event(T1, delta1),
+    agvhd = tdc(TA)
+) |&gt; 
+    as_tibble()
+bmt_time
+```
+
+
+```
+## # A tibble: 163 × 7
+##    my_id    T1 delta1 tstart tstop death agvhd
+##    &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;int&gt;
+##  1     1  2081      0      0    67     0     0
+##  2     1  2081      0     67  2081     0     1
+##  3     2  1602      0      0  1602     0     0
+##  4     3  1496      0      0  1496     0     0
+##  5     4  1462      0      0    70     0     0
+##  6     4  1462      0     70  1462     0     1
+##  7     5  1433      0      0  1433     0     0
+##  8     6  1377      0      0  1377     0     0
+##  9     7  1330      0      0  1330     0     0
+## 10     8   996      0      0    72     0     0
+## # … with 153 more rows
+```
+
+- `tmerge()`: 각 환자의 covariate 값에 따른 multiple time interval 계산을 통해 long type의 데이터를 만들어줌
+
+- `event()`: `tmerge()`에 의해 새롭게 주어진 데이터에 맞게 사건 발생 여부를 생성해줌
+
+- `tdc()`: `tmerge()`에 의해 새롭게 주어진 데이터에 맞게 time dependent covariate에 관한 여부를 나타내는 지표를 생성해줌
+
+]
+
+---
+
+## .green[실습 - Time dependent Cox ph model]
+
+### .black[전처리]
+
+.pull-left[
+ - 원 데이터
+
+```r
+head(bmt2, 5)
+```
+
+```
+##   my_id   T1 delta1   TA deltaA
+## 1     1 2081      0   67      1
+## 2     2 1602      0 1602      0
+## 3     3 1496      0 1496      0
+## 4     4 1462      0   70      1
+## 5     5 1433      0 1433      0
+```
+]
+
+.pull-right[
+ - `tmerge()`에 의해 변환된 데이터
+
+```r
+head(bmt_time, 5)
+```
+
+```
+## # A tibble: 5 × 7
+##   my_id    T1 delta1 tstart tstop death agvhd
+##   &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;int&gt;
+## 1     1  2081      0      0    67     0     0
+## 2     1  2081      0     67  2081     0     1
+## 3     2  1602      0      0  1602     0     0
+## 4     3  1496      0      0  1496     0     0
+## 5     4  1462      0      0    70     0     0
+```
+]
+
+---
+
+## .green[실습 - Time dependent Cox ph model]
+
+### .black[모형 적합]
+
+- Cox ph model과 동일한 함수 `coxph()`로 적합 가능
+
+
+```r
+coxph(
+  Surv(time = tstart, time2 = tstop, event = death) ~ agvhd, 
+  data = bmt_time
+  ) %&gt;% 
+  gtsummary::tbl_regression(exp = TRUE)
+```
+
+<div id="omoraxfrqz" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#omoraxfrqz .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#omoraxfrqz .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#omoraxfrqz .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#omoraxfrqz .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#omoraxfrqz .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#omoraxfrqz .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#omoraxfrqz .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#omoraxfrqz .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#omoraxfrqz .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#omoraxfrqz .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#omoraxfrqz .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#omoraxfrqz .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#omoraxfrqz .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#omoraxfrqz .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#omoraxfrqz .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#omoraxfrqz .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#omoraxfrqz .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#omoraxfrqz .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#omoraxfrqz .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#omoraxfrqz .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#omoraxfrqz .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#omoraxfrqz .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#omoraxfrqz .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#omoraxfrqz .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#omoraxfrqz .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#omoraxfrqz .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#omoraxfrqz .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#omoraxfrqz .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#omoraxfrqz .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#omoraxfrqz .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#omoraxfrqz .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#omoraxfrqz .gt_left {
+  text-align: left;
+}
+
+#omoraxfrqz .gt_center {
+  text-align: center;
+}
+
+#omoraxfrqz .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#omoraxfrqz .gt_font_normal {
+  font-weight: normal;
+}
+
+#omoraxfrqz .gt_font_bold {
+  font-weight: bold;
+}
+
+#omoraxfrqz .gt_font_italic {
+  font-style: italic;
+}
+
+#omoraxfrqz .gt_super {
+  font-size: 65%;
+}
+
+#omoraxfrqz .gt_two_val_uncert {
+  display: inline-block;
+  line-height: 1em;
+  text-align: right;
+  font-size: 60%;
+  vertical-align: -0.25em;
+  margin-left: 0.1em;
+}
+
+#omoraxfrqz .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#omoraxfrqz .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#omoraxfrqz .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#omoraxfrqz .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+#omoraxfrqz .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>HR</strong><sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>95% CI</strong><sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>p-value</strong></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_left">agvhd</td>
+<td class="gt_row gt_center">1.40</td>
+<td class="gt_row gt_center">0.81, 2.43</td>
+<td class="gt_row gt_center">0.2</td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="4"><sup class="gt_footnote_marks">1</sup> HR = Hazard Ratio, CI = Confidence Interval</td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
