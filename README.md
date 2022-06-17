@@ -59,4 +59,4 @@ R의 [{xaringan}](https://github.com/yihui/xaringan) 패키지로 제작되었�
 - 🔗 [pdf 형식](https://be-favorite.github.io/Presentation_archive/2_survival/2_survival.pdf)
   - pdf 자료 특성상 각 슬라이드에 스크롤이 동작하지 않아 몇몇 내용이 잘리는 한계가 있습니다.
 
-  
+- 🔗 [{survminer} cheatsheet](https://be-favorite.github.io/Presentation_archive/2_survival/survminer_cheatsheet.pdf)
