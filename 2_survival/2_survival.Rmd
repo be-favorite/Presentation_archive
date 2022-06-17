@@ -87,11 +87,11 @@ class: inverse, middle, center
 
 - 관심 사건의 발생 여부(이진형 변수)와 생존시간(연속형 변수)을 관측한 자료
 
-<!-- 사망, 질병 발생/재발/호전, 금연, 퇴사 -->
-
-  - 생존자료는 사건-시간 자료(time-to-event data)라 표현하기도 함
+  - 생존자료를 사건-시간 자료(time-to-event data)라 표현하기도 함
+  
   - 실제 생존 시간(true survival time, .red[T]) = 추적 시작 시점 ~ 사건 발생 지점
 
+<!-- 관심사건은 사망, 질병 발생/재발/호전, 금연, 퇴사 등이 될 수 있음-->
 <!-- 단위: days, weeks, months, years -->
 
 - 생존 자료의 가장 큰 특징: 중도 절단(censored)
