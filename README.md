@@ -52,4 +52,11 @@ R의 [{xaringan}](https://github.com/yihui/xaringan) 패키지로 제작되었�
 - 🔗 [pdf 형식](https://be-favorite.github.io/Presentation_archive/1_regression_arima/1_regression_arima.pdf)
   - pdf 자료 특성상 각 슬라이드에 스크롤이 동작하지 않아 몇몇 내용이 잘리는 한계가 있습니다.
 
+#### 통계실습 II. 생존분석
+- 🔗 [HTML 형식](https://be-favorite.github.io/Presentation_archive/2_survival/2_survival.html#1)
+  - 몇몇 슬라이드에 R Code 아웃풋이 길어서 스크롤하여 결과를 확인할 수 있도록 했습니다.
+
+- 🔗 [pdf 형식](https://be-favorite.github.io/Presentation_archive/2_survival/2_survival.pdf)
+  - pdf 자료 특성상 각 슬라이드에 스크롤이 동작하지 않아 몇몇 내용이 잘리는 한계가 있습니다.
+
   
