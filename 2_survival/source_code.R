@@ -83,7 +83,9 @@ ggsurvplot(data = lung,
 
 install.packages("SemiCompRisks")
 data(BMT, package = "SemiCompRisks")
-glimpse(BMT)
+BMT2 <- BMT |> 
+    select(T1, delta1, TA, deltaA)
+glimpse(BMT2)
 
 install.packages("tibble")
 bmt2 <- BMT2 |> 

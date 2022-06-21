@@ -67,7 +67,9 @@ class: title-slide, left, bottom
   - Cox proportional hazard model
   - Time dependent Cox proportional hazard model
   - 실습
-  
+
+&lt;!-- 위험인자 분석 또한 생존함수 추정방법에 해당 --&gt;
+&lt;!-- 위험함수 h(t)와 생존함수 S(t) 사이에는 관계식이 있고 하나를 알면, 하나를 유도할수 있음 h(t) = f(t)/S(t) --&gt;
   
 ]
 
@@ -118,12 +120,11 @@ class: inverse, middle, center
   - Type I censoring
   - Type II censoring
   - Type III censoring
-      - 연구종료
       - loss to follow up
       - drop out
      
-   &lt;!-- 중도절단시간 고정 --&gt;
-  &lt;!-- 관측 사망자수 사전 설정 --&gt;
+  &lt;!-- 사전에 중도절단시간 고정 e.g. 연구종료시점 정해놓은 경우 --&gt;
+  &lt;!-- 사전에 관측 사망자수 설정 --&gt;
   &lt;!-- 임의중도절단 --&gt;
   
 - 이진형 변수와 연속형 변수를 다루어야 함
@@ -182,6 +183,8 @@ class: inverse, middle, center
 
 .pull-left[
 
+&lt;!-- 생존시간을 T라 했을 때 --&gt;
+
 `\begin{align}
 S(t) = Pr(T &gt; t)
 \end{align}`
@@ -221,6 +224,11 @@ S(t) = Pr(T &gt; t)
 .pull-left[
  - 생존함수를 추정하는 대표적인 비모수적 방법론:
 
+&lt;!-- 생존 시간의 분포를 특정 분포로 가정하지 않음 --&gt;
+&lt;!-- 또 다른 비모수적방법론: 생명표방법. 환자 수 상당히 많을때 유용. 개개의 생존시간을 고려하는 대신 생존시간을 몇 개의 구간으로 나누어 생존자료를 요약하는 방법. 보험통계에 많이 쓰임. --&gt;
+&lt;!-- 모수적 방법론: 지수분포, 곰페르츠분포, 와이블분포. 산업계에서 선호 --&gt;
+&lt;!-- 생존시간의 분포형태가 알려져 있을 경우에는 비모수적 방법보다 모수적 방법 이용하는 것이 더 효율적 --&gt;
+
 `\begin{align}
 \hat{S}(t_j) = \prod_{i=1}^{j}(1- \frac{d_i}{n_i})^{\delta_i}
 \end{align}`
@@ -229,7 +237,7 @@ S(t) = Pr(T &gt; t)
 
 - `\(d_i\)`: `\(t_i\)` 시점 사망자 수
 
-- `\(n_i\)`: `\(t_i\)` 시점 바로 직전 사망자 수
+- `\(n_i\)`: `\(t_i\)` 시점 바로 직전 생존자 수
 
 - `\(\delta_i\)`: 중도절단여부(중도절단 = 0, 아니면 1)
 
@@ -270,7 +278,7 @@ library(survminer)
 
 ### .black[데이터 소개]
 
-- 228명 말기 암환자들의 생존 시간(`time`), 사망 여부(`status`) 데이터
+- 228명 진행성 폐암 환자들의 생존 시간(`time`), 사망 여부(`status`) 데이터
 - 1022일간 추적 연구(follow-up study)
 
 
@@ -508,11 +516,8 @@ class: inverse, middle, center
 - 두 그룹 간 생존 함수에 차이가 있는지 살펴보고자 함
 
 - 가설
-
-$$
-H_0: S_1(t) = S_2(t) \\
-H_1: S_1(t) \neq S_2(t)
-$$
+  - `\(H_0: S_1(t) = S_2(t)\)`
+  - `\(H_1: S_1(t) \neq S_2(t)\)`
 
 ]
 
@@ -616,6 +621,11 @@ h(t) = h_0(t){\rm{exp}}(\beta_1x_1 + \beta_2x_2 + \cdots + \beta_kx_k)
 h_0(t) = \rm{exp}(\beta_0): \rm{baseline \ hazard}
 \end{align}`
 
+&lt;!-- 생존시간을 T라하고 이에 영향을 주는 `\(k\)`개 공변량이 있을 때 Cox 비례위험모형을 식 (5)와 같이 표현됨 --&gt;
+&lt;!-- 식 (6)은 공변량의 값들이 모두 0일때의 위험함수 값인 기저위험함수(baseline hazard function)에 해당 --&gt;
+&lt;!-- 그래서 이게 왜 준모수 모형이냐? 식 (5)에 자연로그를 취하고 logh0(t)를 알파(t)로 놓앗다고 생각했을 때, 알파(t)를 알파제로로 놓으면 지수분포 모형, 알파(t)가 알파제로 + 알파*t이면 곰페르츠 분포, 알파(t)가 알파제로 + 알파*로그t이면 와이블분포가 됨. 여기서 물론 분포의 서택이 필요하지 않고 알파(t)의 형태가 어떤 형태이든 무관함. 이에 따라 Cox ph 모형은 모수, 비모수도 아닌 준모수적 추정 방법으로 불림 --&gt;
+&lt;!-- 준모수적 추정방법으로 완전한 확률모형이 아니기 때문에 모수(회귀계수)들의 추정에 있어 편우도(partial likehood)를 이용해야함. 편우도 함수는 사실상 자료의 수치가 아닌 순위(rank)에만 이존하는 비모수적방법으로 , 기저분포에 의존하지 않는다는 장점을 가지고 있으면서도 완전한 우도함수에 비해 효율성은 별로 떨어지지 않는 것으로 알려져 있음--&gt;
+
 ---
 
 ## .green[Cox ph model]
@@ -658,6 +668,8 @@ h_0(t) = \rm{exp}(\beta_0): \rm{baseline \ hazard}
   
   - 즉, 귀무가설을 기각할 수 없다면 비례위험가정을 만족함
 
+&lt;!-- 이 검정방법외에 로그-로그 생존함수를 통해 그래프로 검토하는 방법도 있음 --&gt;
+
 ]
 
 ---
@@ -669,6 +681,8 @@ h_0(t) = \rm{exp}(\beta_0): \rm{baseline \ hazard}
 .scroll-box-20[
 
 - {survival} 패키지의 `coxph()`를 이용해 univariable cox ph model 적합
+
+- 폐암 환자들의 생존 시간이 성별에 따라 영향을 미치는가?
 
 
 ```r
@@ -708,12 +722,12 @@ install.packages("gtsummary")
 gtsummary::tbl_regression(mod_cox, exp = TRUE)
 ```
 
-<div id="fkwexzqcug" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="nsopggydzj" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#fkwexzqcug .gt_table {
+#nsopggydzj .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -738,7 +752,7 @@ gtsummary::tbl_regression(mod_cox, exp = TRUE)
   border-left-color: #D3D3D3;
 }
 
-#fkwexzqcug .gt_heading {
+#nsopggydzj .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -750,7 +764,7 @@ gtsummary::tbl_regression(mod_cox, exp = TRUE)
   border-right-color: #D3D3D3;
 }
 
-#fkwexzqcug .gt_title {
+#nsopggydzj .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -762,7 +776,7 @@ gtsummary::tbl_regression(mod_cox, exp = TRUE)
   border-bottom-width: 0;
 }
 
-#fkwexzqcug .gt_subtitle {
+#nsopggydzj .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -774,13 +788,13 @@ gtsummary::tbl_regression(mod_cox, exp = TRUE)
   border-top-width: 0;
 }
 
-#fkwexzqcug .gt_bottom_border {
+#nsopggydzj .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#fkwexzqcug .gt_col_headings {
+#nsopggydzj .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -795,7 +809,7 @@ gtsummary::tbl_regression(mod_cox, exp = TRUE)
   border-right-color: #D3D3D3;
 }
 
-#fkwexzqcug .gt_col_heading {
+#nsopggydzj .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -815,7 +829,7 @@ gtsummary::tbl_regression(mod_cox, exp = TRUE)
   overflow-x: hidden;
 }
 
-#fkwexzqcug .gt_column_spanner_outer {
+#nsopggydzj .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -827,15 +841,15 @@ gtsummary::tbl_regression(mod_cox, exp = TRUE)
   padding-right: 4px;
 }
 
-#fkwexzqcug .gt_column_spanner_outer:first-child {
+#nsopggydzj .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#fkwexzqcug .gt_column_spanner_outer:last-child {
+#nsopggydzj .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#fkwexzqcug .gt_column_spanner {
+#nsopggydzj .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -847,7 +861,7 @@ gtsummary::tbl_regression(mod_cox, exp = TRUE)
   width: 100%;
 }
 
-#fkwexzqcug .gt_group_heading {
+#nsopggydzj .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -872,7 +886,7 @@ gtsummary::tbl_regression(mod_cox, exp = TRUE)
   vertical-align: middle;
 }
 
-#fkwexzqcug .gt_empty_group_heading {
+#nsopggydzj .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -887,15 +901,15 @@ gtsummary::tbl_regression(mod_cox, exp = TRUE)
   vertical-align: middle;
 }
 
-#fkwexzqcug .gt_from_md > :first-child {
+#nsopggydzj .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#fkwexzqcug .gt_from_md > :last-child {
+#nsopggydzj .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#fkwexzqcug .gt_row {
+#nsopggydzj .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -914,7 +928,7 @@ gtsummary::tbl_regression(mod_cox, exp = TRUE)
   overflow-x: hidden;
 }
 
-#fkwexzqcug .gt_stub {
+#nsopggydzj .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -927,7 +941,7 @@ gtsummary::tbl_regression(mod_cox, exp = TRUE)
   padding-right: 5px;
 }
 
-#fkwexzqcug .gt_stub_row_group {
+#nsopggydzj .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -941,11 +955,11 @@ gtsummary::tbl_regression(mod_cox, exp = TRUE)
   vertical-align: top;
 }
 
-#fkwexzqcug .gt_row_group_first td {
+#nsopggydzj .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#fkwexzqcug .gt_summary_row {
+#nsopggydzj .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -955,16 +969,16 @@ gtsummary::tbl_regression(mod_cox, exp = TRUE)
   padding-right: 5px;
 }
 
-#fkwexzqcug .gt_first_summary_row {
+#nsopggydzj .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#fkwexzqcug .gt_first_summary_row.thick {
+#nsopggydzj .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#fkwexzqcug .gt_last_summary_row {
+#nsopggydzj .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -974,7 +988,7 @@ gtsummary::tbl_regression(mod_cox, exp = TRUE)
   border-bottom-color: #D3D3D3;
 }
 
-#fkwexzqcug .gt_grand_summary_row {
+#nsopggydzj .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -984,7 +998,7 @@ gtsummary::tbl_regression(mod_cox, exp = TRUE)
   padding-right: 5px;
 }
 
-#fkwexzqcug .gt_first_grand_summary_row {
+#nsopggydzj .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -994,11 +1008,11 @@ gtsummary::tbl_regression(mod_cox, exp = TRUE)
   border-top-color: #D3D3D3;
 }
 
-#fkwexzqcug .gt_striped {
+#nsopggydzj .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#fkwexzqcug .gt_table_body {
+#nsopggydzj .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1007,7 +1021,7 @@ gtsummary::tbl_regression(mod_cox, exp = TRUE)
   border-bottom-color: #D3D3D3;
 }
 
-#fkwexzqcug .gt_footnotes {
+#nsopggydzj .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1021,7 +1035,7 @@ gtsummary::tbl_regression(mod_cox, exp = TRUE)
   border-right-color: #D3D3D3;
 }
 
-#fkwexzqcug .gt_footnote {
+#nsopggydzj .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -1030,7 +1044,7 @@ gtsummary::tbl_regression(mod_cox, exp = TRUE)
   padding-right: 5px;
 }
 
-#fkwexzqcug .gt_sourcenotes {
+#nsopggydzj .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1044,7 +1058,7 @@ gtsummary::tbl_regression(mod_cox, exp = TRUE)
   border-right-color: #D3D3D3;
 }
 
-#fkwexzqcug .gt_sourcenote {
+#nsopggydzj .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1052,36 +1066,36 @@ gtsummary::tbl_regression(mod_cox, exp = TRUE)
   padding-right: 5px;
 }
 
-#fkwexzqcug .gt_left {
+#nsopggydzj .gt_left {
   text-align: left;
 }
 
-#fkwexzqcug .gt_center {
+#nsopggydzj .gt_center {
   text-align: center;
 }
 
-#fkwexzqcug .gt_right {
+#nsopggydzj .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#fkwexzqcug .gt_font_normal {
+#nsopggydzj .gt_font_normal {
   font-weight: normal;
 }
 
-#fkwexzqcug .gt_font_bold {
+#nsopggydzj .gt_font_bold {
   font-weight: bold;
 }
 
-#fkwexzqcug .gt_font_italic {
+#nsopggydzj .gt_font_italic {
   font-style: italic;
 }
 
-#fkwexzqcug .gt_super {
+#nsopggydzj .gt_super {
   font-size: 65%;
 }
 
-#fkwexzqcug .gt_two_val_uncert {
+#nsopggydzj .gt_two_val_uncert {
   display: inline-block;
   line-height: 1em;
   text-align: right;
@@ -1090,31 +1104,31 @@ gtsummary::tbl_regression(mod_cox, exp = TRUE)
   margin-left: 0.1em;
 }
 
-#fkwexzqcug .gt_footnote_marks {
+#nsopggydzj .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#fkwexzqcug .gt_asterisk {
+#nsopggydzj .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#fkwexzqcug .gt_slash_mark {
+#nsopggydzj .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#fkwexzqcug .gt_fraction_numerator {
+#nsopggydzj .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#fkwexzqcug .gt_fraction_denominator {
+#nsopggydzj .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;
@@ -1207,16 +1221,20 @@ ggsurvplot(data = lung,
 
 - Cox ph model의 비례위험가정 위배시 고려해야하는 모형
 
-- 편의상 1개의 설명변수를 갖는다고 가정
+- 편의상 고정된 공변량, 시간에 따라 변하는 공변량을 각각 1개씩 갖는다고 가정
 
 `\begin{align}
-h(t) = h_0(t){\rm{exp}}(\beta_1x + \beta_2xt)
+h(t) = h_0(t){\rm{exp}}(\beta_1x_1 + \beta_2x_2(t))
 \end{align}`
+
+- 시간 `\(t\)`에서 위험이 `\(x_1\)`의 값과 시간 `\(t\)`에서의 `\(x_2\)` 값에 의존한다는 것을 의미
+
+&lt;!-- 이런 모형을 고려해야하는 상황은 언제일까? 예를 들어 환자의 혈압이나 백혈구 수 등과 같이 중요한 요인인데 연구 도중 변화하는 공변량들이 있을 때가 그런한 경우임. 이분된 변수도 시간에 따라 변할 수 있음. 예를 들자면 심장이식 후보에 들어있는 환자들에 대해 생존분석을 수행할 때가 있음. 이 환자들은 심장이식이 결정된 순간부터 생존시간을 계산하게 되지만 결정된 수순간부터 실제로 이식되는 시점까지 간격이 생기게됨. 어떤 이는 심장이식수술을 하기 전에 사망하기도 할 것. 즉, 심장이식이 생존시간에 영향을 미치는지 알기 위해 공변량으로 '이식상태'를 생각할 수 있음. 환자가 시점 t0에서 이식수술을 받았다면 0(t&lt;t0), 아니면 1(t&gt;=t0)인 공변량을 고려해 분석해야할 것. 이를 바탕으로 필요한 데이터는 생존시간, 중도절단여부, 이식이 이루어질때까지 기다린 시간이 될 것임. 심장이식을 받지 못햇다면 기다린 시간은 결측이 될 것. --&gt;
 
 - Time dependent hazard ratio
 
 `\begin{align}
-{\rm{HR}}(t) = \frac{h(t|X=x+1)}{h(t|X=x)} = \frac{{\rm{exp}}(\beta_1(x+1)+\beta_2((x+1)t)}{{\rm{exp}}(\beta_1x+\beta_2(xt))} \newline = {\rm{exp}}(\beta_1 + \beta_2t) \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \
+{\rm{HR}}(t) = \frac{h(t|X_2=x_2+1)}{h(t|X_2=x_2)} = \frac{{\rm{exp}}(\beta_1(x_1+1)+\beta_2((x_2+1)t)}{{\rm{exp}}(\beta_1x_1+\beta_2(x_2t))} \newline = {\rm{exp}}(\beta_1 + \beta_2t) \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \
 \end{align}`
 
 - `\(x\)`가 한단위 증가시 HR은 `\({\rm{exp}}(\beta_1+\beta_2t)\)`배가 됨
@@ -1237,41 +1255,28 @@ h(t) = h_0(t){\rm{exp}}(\beta_1x + \beta_2xt)
 ```r
 install.packages("SemiCompRisks")
 data(BMT, package = "SemiCompRisks")
-glimpse(BMT)
+BMT2 &lt;- BMT |&gt; 
+    select(T1, delta1, TA, deltaA)
+glimpse(BMT2)
 ```
 
 
 ```
 ## Rows: 137
-## Columns: 22
-## $ g      &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+## Columns: 4
 ## $ T1     &lt;int&gt; 2081, 1602, 1496, 1462, 1433, 1377, 1330, 996, 226, 1199, 1111,…
-## $ T2     &lt;int&gt; 2081, 1602, 1496, 1462, 1433, 1377, 1330, 996, 226, 1199, 1111,…
 ## $ delta1 &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, …
-## $ delta2 &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, …
-## $ delta3 &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, …
 ## $ TA     &lt;int&gt; 67, 1602, 1496, 70, 1433, 1377, 1330, 72, 226, 1199, 1111, 38, …
 ## $ deltaA &lt;int&gt; 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, …
-## $ TC     &lt;int&gt; 121, 139, 307, 95, 236, 123, 96, 121, 226, 91, 1111, 84, 112, 4…
-## $ deltaC &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, …
-## $ TP     &lt;int&gt; 13, 18, 12, 13, 12, 12, 17, 12, 10, 29, 22, 34, 22, 1167, 21, 1…
-## $ deltaP &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, …
-## $ Z1     &lt;int&gt; 26, 21, 26, 17, 32, 22, 20, 22, 18, 24, 19, 17, 24, 27, 18, 15,…
-## $ Z2     &lt;int&gt; 33, 37, 35, 21, 36, 31, 17, 24, 21, 40, 28, 28, 23, 22, 14, 20,…
-## $ Z3     &lt;int&gt; 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, …
-## $ Z4     &lt;int&gt; 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, …
-## $ Z5     &lt;int&gt; 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, …
-## $ Z6     &lt;int&gt; 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, …
-## $ Z7     &lt;int&gt; 98, 1720, 127, 168, 93, 2187, 1006, 1319, 208, 174, 236, 151, 2…
-## $ Z8     &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
-## $ Z9     &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 2, 2, 1, 1, 1, 1, 1, 1, 1, …
-## $ Z10    &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, …
 ```
 
 - `T1`: 사망 또는 last follow-up까지 기간 (단위: 일)
 - `delta1`: 사망 여부(1: 사망, 0: 생존)
-- `TA`: aGVHD(acture graft-versus-host disease) 발생 기간 (단위: 일)
+- `TA`: aGVHD(acture graft-versus-host disease) 발생될 때까지의 기간 (단위: 일)
 - `deltaA`: aGVHD 발생 여부(1: 발생, 0:발생X)
+- 분석 목적: aGVHD 발병이 골수이식환자의 생존시간에 영향을 미치는가?
+
+&lt;!-- 앞서 말했던 심장이식예제와 같은 비슷한에 해당함. 골수 이식 환자들을 대상으로 aGVHD가 생존시간에 영향을 미치는지 알기위해 분석을 수행할 예정. aGVHD는 약 90일이내에 걸린다고함? 즉, aGVHD가 걸리기 까지의 시간에 대한 자료가 데이터에 필요로 됨.  --&gt;
 
 ]
 ---
@@ -1323,11 +1328,11 @@ bmt_time
 ## # … with 153 more rows
 ```
 
-- `tmerge()`: 각 환자의 covariate 값에 따른 multiple time interval 계산을 통해 long type의 데이터를 만들어줌
+- `tmerge()`: 각 환자의 covariate 값에 따른 multiple time interval 계산을 통해 long type 데이터 생성
 
-- `event()`: `tmerge()`에 의해 새롭게 주어진 데이터에 맞게 사건 발생 여부를 생성해줌
+- `event()`: `tmerge()`에 의해 새롭게 주어진 데이터에 맞게 관심 사건의 발생 여부 생성
 
-- `tdc()`: `tmerge()`에 의해 새롭게 주어진 데이터에 맞게 time dependent covariate에 관한 여부를 나타내는 지표를 생성해줌
+- `tdc()`: `tmerge()`에 의해 새롭게 주어진 데이터에 맞게 time dependent covariate 지표 생성
 
 ]
 
@@ -1390,12 +1395,12 @@ coxph(
   gtsummary::tbl_regression(exp = TRUE)
 ```
 
-<div id="lfgpsmabdw" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="qycuwptkrf" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#lfgpsmabdw .gt_table {
+#qycuwptkrf .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1420,7 +1425,7 @@ coxph(
   border-left-color: #D3D3D3;
 }
 
-#lfgpsmabdw .gt_heading {
+#qycuwptkrf .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1432,7 +1437,7 @@ coxph(
   border-right-color: #D3D3D3;
 }
 
-#lfgpsmabdw .gt_title {
+#qycuwptkrf .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1444,7 +1449,7 @@ coxph(
   border-bottom-width: 0;
 }
 
-#lfgpsmabdw .gt_subtitle {
+#qycuwptkrf .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1456,13 +1461,13 @@ coxph(
   border-top-width: 0;
 }
 
-#lfgpsmabdw .gt_bottom_border {
+#qycuwptkrf .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#lfgpsmabdw .gt_col_headings {
+#qycuwptkrf .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1477,7 +1482,7 @@ coxph(
   border-right-color: #D3D3D3;
 }
 
-#lfgpsmabdw .gt_col_heading {
+#qycuwptkrf .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1497,7 +1502,7 @@ coxph(
   overflow-x: hidden;
 }
 
-#lfgpsmabdw .gt_column_spanner_outer {
+#qycuwptkrf .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1509,15 +1514,15 @@ coxph(
   padding-right: 4px;
 }
 
-#lfgpsmabdw .gt_column_spanner_outer:first-child {
+#qycuwptkrf .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#lfgpsmabdw .gt_column_spanner_outer:last-child {
+#qycuwptkrf .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#lfgpsmabdw .gt_column_spanner {
+#qycuwptkrf .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1529,7 +1534,7 @@ coxph(
   width: 100%;
 }
 
-#lfgpsmabdw .gt_group_heading {
+#qycuwptkrf .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1554,7 +1559,7 @@ coxph(
   vertical-align: middle;
 }
 
-#lfgpsmabdw .gt_empty_group_heading {
+#qycuwptkrf .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1569,15 +1574,15 @@ coxph(
   vertical-align: middle;
 }
 
-#lfgpsmabdw .gt_from_md > :first-child {
+#qycuwptkrf .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#lfgpsmabdw .gt_from_md > :last-child {
+#qycuwptkrf .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#lfgpsmabdw .gt_row {
+#qycuwptkrf .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1596,7 +1601,7 @@ coxph(
   overflow-x: hidden;
 }
 
-#lfgpsmabdw .gt_stub {
+#qycuwptkrf .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1609,7 +1614,7 @@ coxph(
   padding-right: 5px;
 }
 
-#lfgpsmabdw .gt_stub_row_group {
+#qycuwptkrf .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1623,11 +1628,11 @@ coxph(
   vertical-align: top;
 }
 
-#lfgpsmabdw .gt_row_group_first td {
+#qycuwptkrf .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#lfgpsmabdw .gt_summary_row {
+#qycuwptkrf .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1637,16 +1642,16 @@ coxph(
   padding-right: 5px;
 }
 
-#lfgpsmabdw .gt_first_summary_row {
+#qycuwptkrf .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#lfgpsmabdw .gt_first_summary_row.thick {
+#qycuwptkrf .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#lfgpsmabdw .gt_last_summary_row {
+#qycuwptkrf .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1656,7 +1661,7 @@ coxph(
   border-bottom-color: #D3D3D3;
 }
 
-#lfgpsmabdw .gt_grand_summary_row {
+#qycuwptkrf .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1666,7 +1671,7 @@ coxph(
   padding-right: 5px;
 }
 
-#lfgpsmabdw .gt_first_grand_summary_row {
+#qycuwptkrf .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1676,11 +1681,11 @@ coxph(
   border-top-color: #D3D3D3;
 }
 
-#lfgpsmabdw .gt_striped {
+#qycuwptkrf .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#lfgpsmabdw .gt_table_body {
+#qycuwptkrf .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1689,7 +1694,7 @@ coxph(
   border-bottom-color: #D3D3D3;
 }
 
-#lfgpsmabdw .gt_footnotes {
+#qycuwptkrf .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1703,7 +1708,7 @@ coxph(
   border-right-color: #D3D3D3;
 }
 
-#lfgpsmabdw .gt_footnote {
+#qycuwptkrf .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -1712,7 +1717,7 @@ coxph(
   padding-right: 5px;
 }
 
-#lfgpsmabdw .gt_sourcenotes {
+#qycuwptkrf .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1726,7 +1731,7 @@ coxph(
   border-right-color: #D3D3D3;
 }
 
-#lfgpsmabdw .gt_sourcenote {
+#qycuwptkrf .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1734,36 +1739,36 @@ coxph(
   padding-right: 5px;
 }
 
-#lfgpsmabdw .gt_left {
+#qycuwptkrf .gt_left {
   text-align: left;
 }
 
-#lfgpsmabdw .gt_center {
+#qycuwptkrf .gt_center {
   text-align: center;
 }
 
-#lfgpsmabdw .gt_right {
+#qycuwptkrf .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#lfgpsmabdw .gt_font_normal {
+#qycuwptkrf .gt_font_normal {
   font-weight: normal;
 }
 
-#lfgpsmabdw .gt_font_bold {
+#qycuwptkrf .gt_font_bold {
   font-weight: bold;
 }
 
-#lfgpsmabdw .gt_font_italic {
+#qycuwptkrf .gt_font_italic {
   font-style: italic;
 }
 
-#lfgpsmabdw .gt_super {
+#qycuwptkrf .gt_super {
   font-size: 65%;
 }
 
-#lfgpsmabdw .gt_two_val_uncert {
+#qycuwptkrf .gt_two_val_uncert {
   display: inline-block;
   line-height: 1em;
   text-align: right;
@@ -1772,31 +1777,31 @@ coxph(
   margin-left: 0.1em;
 }
 
-#lfgpsmabdw .gt_footnote_marks {
+#qycuwptkrf .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#lfgpsmabdw .gt_asterisk {
+#qycuwptkrf .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#lfgpsmabdw .gt_slash_mark {
+#qycuwptkrf .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#lfgpsmabdw .gt_fraction_numerator {
+#qycuwptkrf .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#lfgpsmabdw .gt_fraction_denominator {
+#qycuwptkrf .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;
