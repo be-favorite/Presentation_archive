@@ -705,3 +705,51 @@ ggplot() +
     facet_nested_wrap(vars(Sex, Group), scales = "free",
                       ncol = 4)
 ```
+
+---
+
+# .brand-red[책 추천]
+
+## R 기본기
+
+- 🔗[R for Data Science](https://bookdown.org/sulgi/r4ds/)
+
+- 🔗[Do it! 쉽게 배우는 R 데이터 분석](http://www.yes24.com/Product/Goods/43868089)
+
+## 회귀분석
+
+- 🔗[예제를 통한 회귀분석 5판](http://www.kyobobook.co.kr/product/detailViewKor.laf?mallGb=KOR&ejkGb=KOR&barcode=9791158080105)
+
+- 🔗[An Introduction to Statistical Learning, 2nd Edition](https://www.statlearning.com)
+
+## 시계열 자료분석
+
+- 🔗[Forecasting: principles and practice, 3rd edition](https://otexts.com/fpp3/)
+
+---
+
+class: inverse
+
+# Thanks!
+
+.pull-right[.pull-down[
+
+<a href="mailto:favorite@kakao.com">
+.white[`r icons::fontawesome("paper-plane")` favorite@kakao.com]
+</a>
+
+<a href="https://github.com/be-favorite">
+.white[`r icons::fontawesome("github")` @be-favorite]
+</a>
+
+<a href="https://twitter.com/TaemoBang">
+.white[`r icons::fontawesome("twitter")` @TaemoBang]
+</a>
+
+<a href="https://github.com/be-favorite/Presentation_archive">
+.white[`r icons::fontawesome("link")` Presentation archive]
+</a>
+
+<br><br><br>
+
+]]
