@@ -72,16 +72,18 @@ class: title-slide, left, bottom
     
    - Full matching
  
-- .content-box-blue[Balance diagnostics]
- 
- 
- - .content-box-blue[실습]
  
  - .content-box-blue[Weighting]
  
    - IPTW
  
-   - 매칭과 Weighting
+   - Matching과 Weighting
+ 
+ 
+- .content-box-blue[Balance diagnostics]
+ 
+ 
+ - .content-box-blue[실습]
 
 ]
  
@@ -326,6 +328,81 @@ class: inverse, middle, center
 
 class: inverse, middle, center
 
+# Weighting
+
+---
+
+## .brand.blue[IPTW: Inverse Probability of Treatment Weighting]
+
+.pull-left[
+- Weighting: 혼란변수의 효과를 통제할 수 있는 또 하나의 방법
+  
+- IPTW는 추정된 PS의 역수를 가중치로 부여하여 혼란변수의 영향을 최소화함
+
+- 다음의 그림은 IPTW의 아이디어를 가장 간단하고 직관적으로 설명해 줌
+
+  - 각 군에 성인남성이 Unbalanced하게 존재
+  
+  - 추정된 PS의 역수를 이용해 가중된 샘플을 생성
+  
+  - 이 가중된 샘플을 Pseudo-population(가상의 모집단)이라하며, 이를 통해 분석을 진행함
+
+]
+
+.pull-right[
+&lt;div class="figure"&gt;
+&lt;img src="./fig/iptw.jpeg" alt="fig 7. IPTW (Ehud Karavani)" width="448" height="500" /&gt;
+&lt;p class="caption"&gt;fig 7. IPTW (Ehud Karavani)&lt;/p&gt;
+&lt;/div&gt;
+]
+
+---
+
+## .brand.blue[매칭과 Weighting]
+
+.pull-left[
+
+### .black[매칭]
+
+- 장점
+
+  - 직관적
+  
+  - balanced check가 어렵지 않음
+  
+- 단점
+
+  - 매칭되지 않은 표본은 버리게되어 표본 수가 줄어듦
+  
+  - 이에따라, 원자료와 Matched sample에서 특성이 크게 달라지면, 원자료의 처리효과와 Matched sample의 처리효과가 달라질 수 있음
+
+]
+
+.pull-right[
+
+### .black[Weighting]
+
+- 장점 
+
+  - 가중치를 줘서 Pseudo-population을 통해 분석을 진행하기 때문에 원 자료를 모두 활용할 수 있음
+
+  - balaced check가 어렵지 않음
+  
+- 단점
+
+  - PSM 또한 추정된 PS의 정확성에 민감하나, Weighting은 매칭에 비해 PS의 추정의 정확성에 훨씬 민감함
+  
+  - 따라서, PS 추정의 정확성에 확신이 없으면 선택해서는 안되는 방법
+
+&lt;!-- 그래서, 일반적으로 매칭을 가장 첫 번째로 고려할 수 있고 그 다음으로 고려하는 것이 매칭 --&gt;
+
+]
+
+
+---
+
+class: inverse, middle, center
+
 # Balance diagnostics
 
 ---
@@ -422,79 +499,305 @@ class: inverse, middle, center
 
 ---
 
-class: inverse, middle, center
+## .brand.blue[IPTW]
 
-# Weighting
+- 간암 환자 1128명을 대상으로 새로운 치료법(PBT)과 기존 치료법(TACE)이 사망율 및 병원 내 사망여부에 미치는 영향 평가
+
+- Confounding factor 보정을 위해 IPTW 수행
+
+- 패키지 설치
+
+
+```r
+install.packages(c("tidyverse", "WeightIt", "survival", "cobalt"))
+```
+
+- 패키지 로딩
+
+
+```r
+library(tidyverse)
+library(WeightIt)
+library(survival)
+library(cobalt)
+```
 
 ---
 
-## .brand.blue[IPTW: Inverse Probability of Treatment Weighting]
+## .brand.blue[IPTW]
+
+.scroll-box-20[
+
+- 데이터 불러오기
+
+
+```r
+dat.t &lt;- read_csv("./data/ps_matching_dat2.csv") |&gt; 
+    janitor::clean_names()
+```
+
+```
+## Rows: 1128 Columns: 16
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: ","
+## dbl (16): gr, age, male, dm, ht, ctp_score, log_dna, log_alt, plt, alb, tbil...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+```
+
+```r
+glimpse(dat.t)
+```
+
+```
+## Rows: 1,128
+## Columns: 16
+## $ gr                    &lt;dbl&gt; 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, …
+## $ age                   &lt;dbl&gt; 64, 55, 49, 42, 39, 43, 53, 43, 57, 34, 63, 52, …
+## $ male                  &lt;dbl&gt; 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, …
+## $ dm                    &lt;dbl&gt; 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, …
+## $ ht                    &lt;dbl&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ ctp_score             &lt;dbl&gt; 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, …
+## $ log_dna               &lt;dbl&gt; 7.69, 0.00, 5.04, 6.86, 1.88, 3.77, 2.92, 8.43, …
+## $ log_alt               &lt;dbl&gt; 2.16, 1.41, 1.64, 1.93, 1.45, 1.20, 1.11, 1.36, …
+## $ plt                   &lt;dbl&gt; 231, 178, 159, 156, 213, 149, 233, 207, 168, 193…
+## $ alb                   &lt;dbl&gt; 4.2, 4.7, 4.1, 4.7, 4.3, 4.3, 4.1, 4.3, 4.2, 4.5…
+## $ tbil                  &lt;dbl&gt; 0.9, 0.6, 0.8, 0.7, 1.0, 0.7, 1.0, 1.2, 0.6, 0.7…
+## $ inr                   &lt;dbl&gt; 0.89, 0.95, 1.02, 0.94, 0.99, 1.10, 0.93, 0.87, …
+## $ cr                    &lt;dbl&gt; 0.65, 0.93, 0.63, 1.05, 0.96, 0.59, 0.68, 0.62, …
+## $ in_hospital_mortality &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, …
+## $ death                 &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ death_yrs             &lt;dbl&gt; 5.57, 5.26, 5.42, 4.04, 5.36, 5.49, 5.38, 5.26, …
+```
+
+- Treatment: `gr`(1 = PBT, 0 = TACE)
+
+- Response variables
+
+  - 생존 자료: `death`(1 = 사망, 0 = 생존), `death_yrs`(생존시간)
+  - 이진형 자료: `in_hospital_mortality`(1 = 사망, 0 = 생존)
+  
+- Covariates: 그외 변수들
+
+]
+
+---
+
+## .brand.blue[IPTW]
+
+- IPTW 수행
+
+
+```r
+W1 &lt;- weightit(gr ~ . -death-death_yrs-in_hospital_mortality, data = dat.t,
+               method = "ps", estimand = "ATE",stabilize = TRUE)
+dat.t$iptw2 &lt;- W1$weights
+W1
+```
+
+```
+## A weightit object
+##  - method: "ps" (propensity score weighting)
+##  - number of obs.: 1128
+##  - sampling weights: none
+##  - treatment: 2-category
+##  - estimand: ATE
+##  - covariates: age, male, dm, ht, ctp_score, log_dna, log_alt, plt, alb, tbil, inr, cr
+```
+
+
+---
+
+## .brand.blue[IPTW]
+
+.scroll-output[
+
+- Cox ph model 적합: 새로운 치료법이 사망에 미치는 영향 평가
+
+
+```r
+f1 &lt;- coxph(Surv(death_yrs,death)~gr, weight=iptw2, data=dat.t)
+summary(f1)
+```
+
+```
+## Call:
+## coxph(formula = Surv(death_yrs, death) ~ gr, data = dat.t, weights = iptw2)
+## 
+##   n= 1128, number of events= 23 
+## 
+##       coef exp(coef) se(coef) robust se      z Pr(&gt;|z|)
+## gr -0.4485    0.6386   0.5262    0.5297 -0.847    0.397
+## 
+##    exp(coef) exp(-coef) lower .95 upper .95
+## gr    0.6386      1.566    0.2261     1.803
+## 
+## Concordance= 0.54  (se = 0.042 )
+## Likelihood ratio test= 0.79  on 1 df,   p=0.4
+## Wald test            = 0.72  on 1 df,   p=0.4
+## Score (logrank) test = 0.74  on 1 df,   p=0.4,   Robust = 0.87  p=0.4
+## 
+##   (Note: the likelihood ratio and score tests assume independence of
+##      observations within a cluster, the Wald and robust score tests do not).
+```
+
+- 새로운 치료법이 사망 위험을 줄여주긴하나, 통계적으로 유의하다고 하긴 어려움( `\(p = 0.397\)` )
+
+]
+
+---
+
+## .brand.blue[IPTW]
+
+.scroll-output[
+
+- Logistic regression model 적합: 새로운 치료법이 병원내 사망여부에 미치는 영향 평가
+
+
+```r
+f2 &lt;- glm(in_hospital_mortality ~ gr,weight=iptw2,data=dat.t,family=binomial)
+summary(f2)
+```
+
+```
+## 
+## Call:
+## glm(formula = in_hospital_mortality ~ gr, family = binomial, 
+##     data = dat.t, weights = iptw2)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -0.5952  -0.3604  -0.3376  -0.3200   3.6030  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  -2.7345     0.1460 -18.723   &lt;2e-16 ***
+## gr           -0.1070     0.2901  -0.369    0.712    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 506.63  on 1127  degrees of freedom
+## Residual deviance: 506.50  on 1126  degrees of freedom
+## AIC: 534.64
+## 
+## Number of Fisher Scoring iterations: 5
+```
+
+- 새로운 치료법이 병원내 사망에 관한 상대 위험을 줄여주긴하나( `\({\rm{exp}}(-0.107) = 0.899\)` ), 통계적으로 유의하다고 하긴 어려움( `\(p = 0.712\)` )
+
+]
+
+---
+
+## .brand.blue[IPTW]
+
+.scroll-output[
+
+- Balance check
+
+
+```r
+bal.fit &lt;- bal.tab(W1,stats="mean.diffs", un = TRUE, m.threshold = .2)
+bal.fit
+```
+
+```
+## Call
+##  weightit(formula = gr ~ . - death - death_yrs - in_hospital_mortality, 
+##     data = dat.t, method = "ps", estimand = "ATE", stabilize = TRUE)
+## 
+## Balance Measures
+##                Type Diff.Un Diff.Adj    M.Threshold
+## prop.score Distance  0.6963   0.0226 Balanced, &lt;0.2
+## age         Contin.  0.0798  -0.0060 Balanced, &lt;0.2
+## male         Binary  0.0320   0.0079 Balanced, &lt;0.2
+## dm           Binary  0.0276   0.0014 Balanced, &lt;0.2
+## ht           Binary  0.0184  -0.0031 Balanced, &lt;0.2
+## ctp_score   Contin.  0.0390  -0.0320 Balanced, &lt;0.2
+## log_dna     Contin.  0.7025   0.0493 Balanced, &lt;0.2
+## log_alt     Contin.  0.3041  -0.0090 Balanced, &lt;0.2
+## plt         Contin. -0.1288   0.0096 Balanced, &lt;0.2
+## alb         Contin. -0.0380   0.0268 Balanced, &lt;0.2
+## tbil        Contin.  0.0774  -0.0135 Balanced, &lt;0.2
+## inr         Contin.  0.1232  -0.0111 Balanced, &lt;0.2
+## cr          Contin.  0.0066   0.0461 Balanced, &lt;0.2
+## 
+## Balance tally for mean differences
+##                    count
+## Balanced, &lt;0.2        13
+## Not Balanced, &gt;0.2     0
+## 
+## Variable with the greatest mean difference
+##  Variable Diff.Adj    M.Threshold
+##   log_dna   0.0493 Balanced, &lt;0.2
+## 
+## Effective sample sizes
+##            Control Treated
+## Unadjusted  816.    312.  
+## Adjusted    771.34  251.25
+```
+
+- 밸런싱이 잘 이루어짐
+
+]
+
+---
+
+## .brand.blue[IPTW]
+
+.scroll-output[
 
 .pull-left[
-- Weighting: 혼란변수의 효과를 통제할 수 있는 또 하나의 방법
-  
-- IPTW는 추정된 PS의 역수를 가중치로 부여하여 혼란변수의 영향을 최소화함
+ - Balance check 시각화 1
 
-- 다음의 그림은 IPTW의 아이디어를 가장 간단하고 직관적으로 설명해 줌
 
-  - 각 군에 성인남성이 Unbalanced하게 존재
-  
-  - 추정된 PS의 역수를 이용해 가중된 샘플을 생성
-  
-  - 이 가중된 샘플을 Pseudo-population(가상의 모집단)이라하며, 이를 통해 분석을 진행함
+```r
+unadj.bal &lt;- bal.fit$Balance[2:12, 2]
+adj.bal &lt;- bal.fit$Balance[2:12, 3]
+plot(c(1,2),c(-1,1),type='n',xlab='',ylab='Standardized Mean Difference',
+     main='Covariate Balance',xaxt='n')
+pp &lt;- length(unadj.bal)
+points(rep(1.2,pp),unadj.bal)
+points(rep(1.8,pp),adj.bal)
+for ( jj in 1:pp) {
+    lines(c(1.2,1.8),c(unadj.bal[jj],adj.bal[jj]),type='l')
+}
+abline(h=0.2,col=2,lty=2)
+abline(h=-0.2,col=2,lty=2)
+axis(1, at=c(1.2,1.8), labels=c('Unweighted','Weighted'))
+```
 
 ]
 
 .pull-right[
-&lt;div class="figure"&gt;
-&lt;img src="./fig/iptw.jpeg" alt="fig 7. IPTW (Ehud Karavani)" width="448" height="500" /&gt;
-&lt;p class="caption"&gt;fig 7. IPTW (Ehud Karavani)&lt;/p&gt;
-&lt;/div&gt;
+&lt;img src="3_matching_files/figure-html/balance-1.png" width="2100" style="display: block; margin: auto;" /&gt;
+]
+
 ]
 
 ---
 
-## .brand.blue[매칭과 Weighting]
+## .brand.blue[IPTW]
 
 .pull-left[
+ - Balance check 시각화 (`age`)
 
-### .black[매칭]
-
-- 장점
-
-  - 직관적
-  
-  - balanced check가 어렵지 않음
-  
-- 단점
-
-  - 매칭되지 않은 표본은 버리게되어 표본 수가 줄어듦
-  
-  - 이에따라, 원자료와 Matched sample에서 특성이 크게 달라지면, 원자료의 처리효과와 Matched sample의 처리효과가 달라질 수 있음
+&lt;img src="3_matching_files/figure-html/balance2-1.png" width="2100" style="display: block; margin: auto;" /&gt;
 
 ]
 
 .pull-right[
+ - Balance check 시각화 (`dm`: 당뇨 유무)
 
-### .black[Weighting]
-
-- 장점 
-
-  - 가중치를 줘서 Pseudo-population을 통해 분석을 진행하기 때문에 원 자료를 모두 활용할 수 있음
-
-  - balaced check가 어렵지 않음
-  
-- 단점
-
-  - PSM 또한 추정된 PS의 정확성에 민감하나, Weighting은 매칭에 비해 PS의 추정의 정확성에 훨씬 민감함
-  
-  - 따라서, PS 추정의 정확성에 확신이 없으면 선택해서는 안되는 방법
-
-&lt;!-- 그래서, 일반적으로 매칭을 가장 첫 번째로 고려할 수 있고 그 다음으로 고려하는 것이 매칭 --&gt;
-
+&lt;img src="3_matching_files/figure-html/balance3-1.png" width="2100" style="display: block; margin: auto;" /&gt;
 ]
 
+
 ---
+
 
 ## .brand.blue[책 추천]
 

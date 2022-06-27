@@ -72,16 +72,18 @@ class: title-slide, left, bottom
     
    - Full matching
  
-- .content-box-blue[Balance diagnostics]
- 
- 
- - .content-box-blue[실습]
  
  - .content-box-blue[Weighting]
  
    - IPTW
  
-   - 매칭과 Weighting
+   - Matching과 Weighting
+ 
+ 
+- .content-box-blue[Balance diagnostics]
+ 
+ 
+ - .content-box-blue[실습]
 
 ]
  
@@ -323,6 +325,80 @@ class: inverse, middle, center
 
 class: inverse, middle, center
 
+# Weighting
+
+---
+
+## .brand.blue[IPTW: Inverse Probability of Treatment Weighting]
+
+.pull-left[
+- Weighting: 혼란변수의 효과를 통제할 수 있는 또 하나의 방법
+  
+- IPTW는 추정된 PS의 역수를 가중치로 부여하여 혼란변수의 영향을 최소화함
+
+- 다음의 그림은 IPTW의 아이디어를 가장 간단하고 직관적으로 설명해 줌
+
+  - 각 군에 성인남성이 Unbalanced하게 존재
+  
+  - 추정된 PS의 역수를 이용해 가중된 샘플을 생성
+  
+  - 이 가중된 샘플을 Pseudo-population(가상의 모집단)이라하며, 이를 통해 분석을 진행함
+
+]
+
+.pull-right[
+```{r IPTW, echo = FALSE, out.height = 500, fig.cap = "fig 7. IPTW (Ehud Karavani)"}
+knitr::include_graphics("./fig/iptw.jpeg")
+```
+]
+
+---
+
+## .brand.blue[매칭과 Weighting]
+
+.pull-left[
+
+### .black[매칭]
+
+- 장점
+
+  - 직관적
+  
+  - balanced check가 어렵지 않음
+  
+- 단점
+
+  - 매칭되지 않은 표본은 버리게되어 표본 수가 줄어듦
+  
+  - 이에따라, 원자료와 Matched sample에서 특성이 크게 달라지면, 원자료의 처리효과와 Matched sample의 처리효과가 달라질 수 있음
+
+]
+
+.pull-right[
+
+### .black[Weighting]
+
+- 장점 
+
+  - 가중치를 줘서 Pseudo-population을 통해 분석을 진행하기 때문에 원 자료를 모두 활용할 수 있음
+
+  - balaced check가 어렵지 않음
+  
+- 단점
+
+  - PSM 또한 추정된 PS의 정확성에 민감하나, Weighting은 매칭에 비해 PS의 추정의 정확성에 훨씬 민감함
+  
+  - 따라서, PS 추정의 정확성에 확신이 없으면 선택해서는 안되는 방법
+
+<!-- 그래서, 일반적으로 매칭을 가장 첫 번째로 고려할 수 있고 그 다음으로 고려하는 것이 매칭 -->
+
+]
+
+
+---
+
+class: inverse, middle, center
+
 # Balance diagnostics
 
 ---
@@ -416,78 +492,188 @@ class: inverse, middle, center
 
 ---
 
-class: inverse, middle, center
+## .brand.blue[IPTW]
 
-# Weighting
+- 간암 환자 1128명을 대상으로 새로운 치료법(PBT)과 기존 치료법(TACE)이 사망율 및 병원 내 사망여부에 미치는 영향 평가
+
+- Confounding factor 보정을 위해 IPTW 수행
+
+- 패키지 설치
+
+```{r, eval = FALSE}
+install.packages(c("tidyverse", "WeightIt", "survival", "cobalt"))
+```
+
+- 패키지 로딩
+
+```{r, message = FALSE}
+library(tidyverse)
+library(WeightIt)
+library(survival)
+library(cobalt)
+```
 
 ---
 
-## .brand.blue[IPTW: Inverse Probability of Treatment Weighting]
+## .brand.blue[IPTW]
+
+.scroll-box-20[
+
+- 데이터 불러오기
+
+```{r}
+dat.t <- read_csv("./data/ps_matching_dat2.csv") |> 
+    janitor::clean_names()
+glimpse(dat.t)
+```
+
+- Treatment: `gr`(1 = PBT, 0 = TACE)
+
+- Response variables
+
+  - 생존 자료: `death`(1 = 사망, 0 = 생존), `death_yrs`(생존시간)
+  - 이진형 자료: `in_hospital_mortality`(1 = 사망, 0 = 생존)
+  
+- Covariates: 그외 변수들
+
+]
+
+---
+
+## .brand.blue[IPTW]
+
+- IPTW 수행
+
+```{r}
+W1 <- weightit(gr ~ . -death-death_yrs-in_hospital_mortality, data = dat.t,
+               method = "ps", estimand = "ATE",stabilize = TRUE)
+dat.t$iptw2 <- W1$weights
+W1
+```
+
+
+---
+
+## .brand.blue[IPTW]
+
+.scroll-output[
+
+- Cox ph model 적합: 새로운 치료법이 사망에 미치는 영향 평가
+
+```{r}
+f1 <- coxph(Surv(death_yrs,death)~gr, weight=iptw2, data=dat.t)
+summary(f1)
+```
+
+- 새로운 치료법이 사망 위험을 줄여주긴하나, 통계적으로 유의하다고 하긴 어려움( $p = 0.397$ )
+
+]
+
+---
+
+## .brand.blue[IPTW]
+
+.scroll-output[
+
+- Logistic regression model 적합: 새로운 치료법이 병원내 사망여부에 미치는 영향 평가
+
+```{r, warning = FALSE}
+f2 <- glm(in_hospital_mortality ~ gr,weight=iptw2,data=dat.t,family=binomial)
+summary(f2)
+```
+
+- 새로운 치료법이 병원내 사망에 관한 상대 위험을 줄여주긴하나( ${\rm{exp}}(-0.107) = 0.899$ ), 통계적으로 유의하다고 하긴 어려움( $p = 0.712$ )
+
+]
+
+---
+
+## .brand.blue[IPTW]
+
+.scroll-output[
+
+- Balance check
+
+```{r, warning = FALSE}
+bal.fit <- bal.tab(W1,stats="mean.diffs", un = TRUE, m.threshold = .2)
+bal.fit
+```
+
+- 밸런싱이 잘 이루어짐
+
+]
+
+---
+
+## .brand.blue[IPTW]
+
+.scroll-output[
 
 .pull-left[
-- Weighting: 혼란변수의 효과를 통제할 수 있는 또 하나의 방법
-  
-- IPTW는 추정된 PS의 역수를 가중치로 부여하여 혼란변수의 영향을 최소화함
+ - Balance check 시각화 1
 
-- 다음의 그림은 IPTW의 아이디어를 가장 간단하고 직관적으로 설명해 줌
-
-  - 각 군에 성인남성이 Unbalanced하게 존재
-  
-  - 추정된 PS의 역수를 이용해 가중된 샘플을 생성
-  
-  - 이 가중된 샘플을 Pseudo-population(가상의 모집단)이라하며, 이를 통해 분석을 진행함
+```{r, eval = FALSE}
+unadj.bal <- bal.fit$Balance[2:12, 2]
+adj.bal <- bal.fit$Balance[2:12, 3]
+plot(c(1,2),c(-1,1),type='n',xlab='',ylab='Standardized Mean Difference',
+     main='Covariate Balance',xaxt='n')
+pp <- length(unadj.bal)
+points(rep(1.2,pp),unadj.bal)
+points(rep(1.8,pp),adj.bal)
+for ( jj in 1:pp) {
+    lines(c(1.2,1.8),c(unadj.bal[jj],adj.bal[jj]),type='l')
+}
+abline(h=0.2,col=2,lty=2)
+abline(h=-0.2,col=2,lty=2)
+axis(1, at=c(1.2,1.8), labels=c('Unweighted','Weighted'))
+```
 
 ]
 
 .pull-right[
-```{r IPTW, echo = FALSE, out.height = 500, fig.cap = "fig 7. IPTW (Ehud Karavani)"}
-knitr::include_graphics("./fig/iptw.jpeg")
+```{r balance, warning = FALSE, echo = FALSE, fig.height=6.5, fig.retina = 2, fig.align = "center"}
+unadj.bal <- bal.fit$Balance[2:12, 2]
+adj.bal <- bal.fit$Balance[2:12, 3]
+plot(c(1,2),c(-1,1),type='n',xlab='',ylab='Standardized Mean Difference',
+     main='Covariate Balance',xaxt='n')
+pp <- length(unadj.bal)
+points(rep(1.2,pp),unadj.bal)
+points(rep(1.8,pp),adj.bal)
+for ( jj in 1:pp) {
+    lines(c(1.2,1.8),c(unadj.bal[jj],adj.bal[jj]),type='l')
+}
+abline(h=0.2,col=2,lty=2)
+abline(h=-0.2,col=2,lty=2)
+axis(1, at=c(1.2,1.8), labels=c('Unweighted','Weighted'))
 ```
 ]
 
+]
+
 ---
 
-## .brand.blue[매칭과 Weighting]
+## .brand.blue[IPTW]
 
 .pull-left[
+ - Balance check 시각화 (`age`)
 
-### .black[매칭]
-
-- 장점
-
-  - 직관적
-  
-  - balanced check가 어렵지 않음
-  
-- 단점
-
-  - 매칭되지 않은 표본은 버리게되어 표본 수가 줄어듦
-  
-  - 이에따라, 원자료와 Matched sample에서 특성이 크게 달라지면, 원자료의 처리효과와 Matched sample의 처리효과가 달라질 수 있음
+```{r balance2, warning = FALSE, echo = FALSE, fig.height=6.5, fig.retina = 2, fig.align = "center"}
+bal.plot(W1,"age", which = "both")
+```
 
 ]
 
 .pull-right[
+ - Balance check 시각화 (`dm`: 당뇨 유무)
 
-### .black[Weighting]
-
-- 장점 
-
-  - 가중치를 줘서 Pseudo-population을 통해 분석을 진행하기 때문에 원 자료를 모두 활용할 수 있음
-
-  - balaced check가 어렵지 않음
-  
-- 단점
-
-  - PSM 또한 추정된 PS의 정확성에 민감하나, Weighting은 매칭에 비해 PS의 추정의 정확성에 훨씬 민감함
-  
-  - 따라서, PS 추정의 정확성에 확신이 없으면 선택해서는 안되는 방법
-
-<!-- 그래서, 일반적으로 매칭을 가장 첫 번째로 고려할 수 있고 그 다음으로 고려하는 것이 매칭 -->
-
+```{r balance3, warning = FALSE, echo = FALSE, fig.height=6.5, fig.retina = 2, fig.align = "center"}
+bal.plot(W1,"dm", which = "both")
+```
 ]
 
+
 ---
+
 
 ## .brand.blue[책 추천]
 
