@@ -7,7 +7,7 @@ library(WeightIt)
 library(survival)
 library(cobalt)
 
-dat.t <- read_csv('./1일차/한승봉_Matching, IPTW/ps_matching_dat2.csv') |> 
+dat.t <- read_csv('./3_matching/data/ps_matching_dat2.csv') |> 
     janitor::clean_names()
 glimpse(dat.t)
 
