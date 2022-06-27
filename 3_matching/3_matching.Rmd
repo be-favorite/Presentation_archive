@@ -101,7 +101,7 @@ class: inverse, middle, center
 
   - 아이스크림 판매량과 익사 사고 건수 간에는 상관이 존재
   
-  - 둘 간의 상관성은 아이스크림 판매량( $x$ )이 익사 사고 건수( $y$ )의 예측에 유용할 순 있음
+  - 즉, 아이스크림 판매량( $x$ )이 익사 사고 건수( $y$ )의 예측에 유용할 순 있음을 뜻함
   
   - 다만, $x$가 $y$의 원인이 된다는 것은 아님
   
@@ -111,11 +111,11 @@ class: inverse, middle, center
 
 - 인과(Causation): 원인과 결과
 
-  - 비 예보가 있는 경우, 아침에 자건거를 타는 사람들이 줄어듦
+  - 비 예보가 있는 경우, 아침에 자전거를 타는 사람들이 줄어듦
   
   - 즉, 강우( $x$, 원인)가 자전거 타는 사람( $y$, 결과)에 영향을 미침
   
-  - 인과관계를 결정할 수 있다, 보다 더 나은 모델을 만들 수 있음
+  - 인과관계를 통해 보다 더 나은 모델을 만들 수 있음
 
 ---
 
@@ -212,7 +212,7 @@ knitr::include_graphics("./fig/confounder.png")
 ]
 .right-column[
 
- - Casual effect 
+ - Causal effect 
  
  \begin{align}
   E(Y(1)) - E(Y(0)) = E(Y|T = 1) - E(Y|T=0)
@@ -223,7 +223,7 @@ knitr::include_graphics("./fig/confounder.png")
  
    - $T=0$일때 $X$의 분포와 $T=1$일때 $X$의 분포가 다르기 때문
  
- - 매칭(Matching)을 통해 해결 가능
+ - Matching, Weighting을 통해 해결 가능
  
    - 관찰연구에서 선택편향을 감소시키는 방법론
    
@@ -254,15 +254,15 @@ class: inverse, middle, center
 
 - 여기서 $Y$는 처리(treatment), $X$는 혼란변수가 됨
 
-- 각 연구대상의 추정된 $\pi$가 바로 각 연구대상의 propensity score에 해당함
-
 - 즉, propensity score는 연구 대상이 혼란변수에 의해 실험군에 포함될 확률을 의미
 
-- PS(propensity score)가 같은 혹은 유사한 대상끼리 짝을 맞추어 자료 선정
+- Matching:PS(propensity score)가 같은 혹은 유사한 대상끼리 짝을 맞추어 자료 선정
 
   - .blue[Key idea]: PS의 차이가 작은 대상들끼리 매칭
 
   - 짝을 이루지 못하면 제외
+  
+- Weighting: PS가 작은 대상에 대해 역가중(IPTW)을 줌으로써 두 군간 혼란변수의 분포를 맞춰줌
 
 ---
 
@@ -282,7 +282,7 @@ class: inverse, middle, center
 
   - 순간에 최적이라고 생각되는 것을 선택해 나가는 방식
   
-  - 실험군 중 어떤 대상부터 매칭을 시작하느냐에 따라 매칭의 지링 달라질 수 있음
+  - 실험군 중 어떤 대상부터 매칭을 시작하느냐에 따라 매칭의 질이 조금 달라질 수 있음
 ]
 
 .pull-right[
@@ -297,7 +297,9 @@ class: inverse, middle, center
   - 캘리퍼: 추정된 PS의 표준오차의 $k$배 범위에 존재하는 대상만 매칭에 고려
   
   - 대조/실험군 비: 대조군이 실험군에 비해 많은 경우 1:N 매칭을 통해 전체 표본 수를 증가시킬 수 있음
-  
+
+<!-- 1:N은 하나의 실험군을 비슷한 성향을 가진 여러개의 대조군과 매칭 -> 대조군 표본이 많은 경우가 -->
+
 ]
 
 ---
@@ -313,11 +315,7 @@ class: inverse, middle, center
 
 - N:N 매칭
 
-- 1:1 매칭은 대조군과 실험군의 PS가 비슷하지 않으면 많은 수의 실험군 자료가 탈락된다는 단점 존재
-
 - 1:N과 N:1 모두 사용하여 매칭 셋을 만듦
-
-<!-- 1:N은 하나의 실험군을 비슷한 성향을 가진 여러개의 대조군과 매칭 -> 대조군 표본이 많은 경우가 -->
 
 - Non-greedy matching 방법론 중 하나
 
@@ -390,7 +388,7 @@ knitr::include_graphics("./fig/iptw.jpeg")
   
   - 따라서, PS 추정의 정확성에 확신이 없으면 선택해서는 안되는 방법
 
-<!-- 그래서, 일반적으로 매칭을 가장 첫 번째로 고려할 수 있고 그 다음으로 고려하는 것이 매칭 -->
+<!-- 그래서, 일반적으로 매칭을 가장 첫 번째로 고려할 수 있고 그 다음으로 고려하는 것이 Weighting -->
 
 ]
 
@@ -551,6 +549,11 @@ dat.t$iptw2 <- W1$weights
 W1
 ```
 
+<!-- ATE(Average treatement effect): A 군에 대응되는 population이 A를 받았을 때의 효과와 A 군에 대응되는 population이 B를 받았을 때의 효과 차이 -->
+
+<!-- ATT(Average treatment effect on treated): 전체 population (A+B)이 A를 받았을 때의 효과와 전체 population (A+B)이 B를 받았을 때의 효과 차이 -->
+
+<!-- 매칭은 ATT를 통해 추정하고, Weighting은 계산 방식에 따라 ATE, ATT를 추정할 수 있음. 기본은 ATE임 -->
 
 ---
 
