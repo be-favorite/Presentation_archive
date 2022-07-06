@@ -727,6 +727,19 @@ ggplot() +
 - 🔗[Forecasting: principles and practice, 3rd edition](https://otexts.com/fpp3/)
 
 ---
+class: inverse, middle, center
+
+# References
+
+---
+
+## .brand-red[References]
+
+[1] 나, 종화. R 시각화와 통계자료분석 2. 자유아카데미, 2016. http://www.yes24.com/Product/Goods/29643662.
+
+[2] Breheny, Patrick. “High-Dimensional Data Analysis (BIOS 7600),” 2016. https://myweb.uiowa.edu/pbreheny/7600/s16/index.html.
+
+---
 
 class: inverse
 

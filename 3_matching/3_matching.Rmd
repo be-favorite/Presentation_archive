@@ -685,6 +685,31 @@ bal.plot(W1,"dm", which = "both")
 - 🔗[통계적 인과 추론(개정판)](https://www.kyowoo.co.kr/02_sub/view.php?p_idx=1640&cate=0014_0019_)
 
 ---
+class: inverse, middle, center
+
+# References
+
+---
+
+## .brand.blue[References]
+
+.scroll-output[
+
+[1] Karavani, Ehud. “Solving Simpson’s Paradox with Inverse Probability Weighting.” Medium, September 12, 2020. https://towardsdatascience.com/solving-simpsons-paradox-with-inverse-probability-weighting-79dbb1395597.
+
+[2] Kim, Jinsil. “RWE 연구에서 인과추론.” Linewalks Blog (blog), February 2, 2021. https://blog.linewalks.com/archives/7335.
+
+[3] Lee, Dong Kyu. “An Introduction to Propensity Score Matching Methods.” Anesthesia and Pain Medicine 11, no. 2 (April 30, 2016): 130–48. https://doi.org/10.17085/apm.2016.11.2.130.
+
+[4] web-r. WebrPSM, 2021. https://www.youtube.com/watch?v=MjzX-DLB0jc.
+
+[5] Zhang, Zhongheng. “Propensity Score Method: A Non-Parametric Technique to Reduce Model Dependence.” Annals of Translational Medicine 5 (January 1, 2017): 7–7. https://doi.org/10.21037/atm.2016.08.57.
+
+[6] 인과추론의 데이터과학. [Bootcamp 2-4] 매칭과 역확률가중치, 2022. https://www.youtube.com/watch?v=BVBUQz3Ix8w.
+
+]
+
+---
 
 class: inverse
 

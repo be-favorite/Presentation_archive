@@ -351,3 +351,44 @@ plot(pred_pm, "slices",
 
 
 ]
+
+---
+class: inverse, middle, center
+
+# References
+
+---
+
+## .brand-blue[References]
+
+[1] Gasparrini, Antonio, Benedict Armstrong, and M.G. Kenward. “Distributed Lag Non-Linear Models.” Statistics in Medicine 29 (September 20, 2010): 2224–34. https://doi.org/10.1002/sim.3940.
+
+[2] Gasparrini, Antonio. “Distributed Lag Linear and Non-Linear Models in R: The Package Dlnm.” Journal of Statistical Software 43 (July 1, 2011): 1–20. https://doi.org/10.18637/jss.v043.i08.
+
+---
+
+class: inverse
+
+# Thanks!
+
+.pull-right[.pull-down[
+
+<a href="mailto:favorite@kakao.com">
+.white[`r icons::fontawesome("paper-plane")` favorite@kakao.com]
+</a>
+
+<a href="https://github.com/be-favorite">
+.white[`r icons::fontawesome("github")` @be-favorite]
+</a>
+
+<a href="https://twitter.com/TaemoBang">
+.white[`r icons::fontawesome("twitter")` @TaemoBang]
+</a>
+
+<a href="https://github.com/be-favorite/Presentation_archive">
+.white[`r icons::fontawesome("link")` Presentation archive]
+</a>
+
+<br><br><br>
+
+]]

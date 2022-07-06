@@ -892,6 +892,32 @@ coxph(
 
 - 🔗[The Epidemiologist R Handbook](https://epirhandbook.com/en/index.html)
 
+
+---
+class: inverse, middle, center
+
+# References
+
+---
+
+## .green[References]
+
+.scroll-output[
+
+[1] 이재원, 박미라, and 유한나. 생명과학연구를 위한 통계적방법. 자유아카데미, 2006. http://www.yes24.com/Product/Goods/3444417.
+
+[2] Batra, Neale. The Epidemiologist R Handbook, 2021. https://epirhandbook.com/en/index.html.
+
+[3] Gruman, Jim. “Survival Analysis.” Personal blog. myTidyTuesday, October 12, 2021. https://opus1993.github.io/myTidyTuesday/Survival.html.
+
+[4] Harrison, Ewen, and Riinu Pius. R for Health Data Science. CRC Press, 2021. https://argoshare.is.ed.ac.uk/healthyr_book/.
+
+[5] Mohammed, Shariq. “Introduction to Survival Analysis Using R.” Workshop on Computational Biostatistics and Survival Analysis, December 23, 2019. https://shariq-mohammed.github.io/files/cbsa2019/1-intro-to-survival.html#1_setup.
+
+[6] Zabor, Emily. “Survival Analysis in R.” Personal blog. emilyzabor, March 2019. https://www.emilyzabor.com/tutorials/survival_analysis_in_r_tutorial.html#Part_1:_Introduction_to_Survival_Analysis.
+
+]
+
 ---
 
 class: inverse
