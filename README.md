@@ -22,7 +22,7 @@
 
 - 🔗 [HTML](https://be-favorite.github.io/Presentation_archive/DLM%2C%20DLNM/Introduction_dlm%2Cdlnm.html), [PDF](https://be-favorite.github.io/Presentation_archive/DLM%2C%20DLNM/Introduction%20to%20DLM%20and%20DLNM.pdf)
 
-## 2022년 가천대 길병원 고급통계교육
+## 2022 가천대 길병원 고급통계교육
 
 ### 이벤트 세부 사항
 **이벤트**: R을 활용한 통계분석 실습
@@ -60,3 +60,18 @@ PDF 형식 자료는 각 슬라이드에 스크롤이 동작하지 않아 몇몇
 
 #### 통계실습 III. 매칭
 - 🔗 [HTML](https://be-favorite.github.io/Presentation_archive/3_matching/3_matching.html#1), [PDF](https://be-favorite.github.io/Presentation_archive/3_matching/3_matching.pdf)
+
+## 질병관리청 건강보험 청구자료 데이터 교육
+
+### 이벤트 세부 사항
+**이벤트**: DLNM을 이용한 대기오염원 건강영향평가
+
+**날짜**: 2022년 7월 11일 16:30 - 17:00
+
+**장소**: 질병관리청 회의실
+
+**인원**: 6명
+
+### 슬라이드
+
+- 🔗 [HTML](https://be-favorite.github.io/Presentation_archive/kdca_dlnm/kdca_dlnm.html)
