@@ -75,3 +75,18 @@ PDF 형식 자료는 각 슬라이드에 스크롤이 동작하지 않아 몇몇
 ### 슬라이드
 
 - 🔗 [HTML](https://be-favorite.github.io/Presentation_archive/kdca_dlnm/kdca_dlnm.html)
+
+## 서울 R 미트업
+
+### 이벤트 세부 사항
+**이벤트**: ggplo2 컬러링 가이드
+
+**날짜**: 2022년 8월 12일 10:00 - 10:30
+
+**장소**: 건국대학교 상허연구관 302호
+
+**인원**: 20명
+
+### 슬라이드
+
+- 🔗 [HTML](https://be-favorite.github.io/Presentation_archive/coloring_guide/coloring_guide.html)
