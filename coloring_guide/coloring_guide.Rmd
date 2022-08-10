@@ -946,6 +946,12 @@ class: inverse, middle, center
 
 [1] Rapp, Albert. “4 Ways to Use Colors in Ggplot More Efficiently.” Blog. Albert Rapp, February 19, 2022. https://albert-rapp.de/posts/ggplot2-tips/07_four_ways_colors_more_efficiently/07_four_ways_colors_more_efficiently.html.
 
+### .brand-blue[Theme and CSS in xaringan slides]
+
+- https://github.com/statisticsplaybook/statisticsplaybook
+
+- https://github.com/garthtarr/sydney_xaringan
+
 ---
 
 class: inverse
