@@ -587,7 +587,7 @@ alone_plt +
     hjust = 0, vjust = 0, size = 7, #<<
     family = 'firasans', color = colors[1]) + #<<
   labs(title = 'Label directly') +
-  theme(legend.position = 'none')
+  theme(legend.position = 'none') #<<
 ```
 
 ]
@@ -647,7 +647,7 @@ alone_plt +
     size = 6,
     label.color = NA #<<
   ) +
-  theme(legend.position = 'none')
+  theme(legend.position = 'none') #<<
 ```
 
 ]
@@ -706,7 +706,7 @@ age_40_plt +
     size = 5,
     label.color = NA #<<
   ) +
-  theme(legend.position = 'none')
+  theme(legend.position = 'none') #<<
 ```
   
 ]
@@ -790,7 +790,7 @@ head(labels)
 
 .pull-left[
 ```{r mpg-add, warning = FALSE, fig.height = 6, fig.retina = 2, fig.cap = "그림 3.3", echo = FALSE}
-shades_plt2 <- manual_counts %>% 
+shades_plt2 <- manual_counts %>%
   ggplot(aes(x = year, y = n, fill = class_group)) +
   geom_col(aes(alpha = class), col = 'white') + #<<
   scale_fill_manual(values = colors) +
@@ -805,7 +805,7 @@ shades_plt2
 
 .pull-right[
 ```{r, eval = FALSE}
-shades_plt2 <- manual_counts %>% 
+shades_plt2 <- manual_counts %>% #<<
   ggplot(aes(x = year, y = n, fill = class_group)) +
   geom_col(aes(alpha = class), col = 'white') + #<<
   scale_fill_manual(values = colors) +
@@ -907,18 +907,16 @@ p
 ```{r after-2, warning = FALSE, fig.height = 6, fig.retina = 2, echo = FALSE}
 alone_plt +
   annotate(
-    'text', x = 15, y = 455,
-    label = 'We spend a lot of time alone...',
+    'richtext', #<<
+    x = 15,
+    y = 400,
+    label = color_alone, #<<
     hjust = 0, vjust = 0,
     family = 'firasans',
-    size = 7) +
-  annotate(
-    'text',  x = 70,  y = 420, 
-    label = 'alone',
-    hjust = 0, vjust = 0, size = 7,
-    family = 'firasans', color = colors[1]) +
-  theme(legend.position = 'none') +
-  labs(title = "")
+    size = 6,
+    label.color = NA #<<
+  ) +
+  theme(legend.position = 'none') #<<
 ``` 
 ]
 

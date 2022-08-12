@@ -535,7 +535,7 @@ alone_plt +
 *   hjust = 0, vjust = 0, size = 7,
 *   family = 'firasans', color = colors[1]) +
   labs(title = 'Label directly') +
-  theme(legend.position = 'none')
+* theme(legend.position = 'none')
 ```
 
 ]
@@ -590,7 +590,7 @@ alone_plt +
     size = 6,
 *   label.color = NA
   ) +
-  theme(legend.position = 'none')
+* theme(legend.position = 'none')
 ```
 
 ]
@@ -646,7 +646,7 @@ age_40_plt +
     size = 5,
 *   label.color = NA
   ) +
-  theme(legend.position = 'none')
+* theme(legend.position = 'none')
 ```
   
 ]
@@ -741,7 +741,7 @@ head(labels)
 .pull-right[
 
 ```r
-shades_plt2 &lt;- manual_counts %&gt;% 
+*shades_plt2 &lt;- manual_counts %&gt;%
   ggplot(aes(x = year, y = n, fill = class_group)) +
 * geom_col(aes(alpha = class), col = 'white') +
   scale_fill_manual(values = colors) +
