@@ -916,7 +916,8 @@ alone_plt +
     size = 6,
     label.color = NA #<<
   ) +
-  theme(legend.position = 'none') #<<
+  theme(legend.position = 'none') + #<<
+  labs(title = "")
 ``` 
 ]
 
