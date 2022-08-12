@@ -470,8 +470,8 @@ alone_plt +
 ## .brand-blue[전달력 높이기 III]
 
 &lt;div class="figure"&gt;
-&lt;img src="coloring_guide_files/figure-html/spend3-1.png" alt="그림 2.3" width="504" /&gt;
-&lt;p class="caption"&gt;그림 2.3&lt;/p&gt;
+&lt;img src="coloring_guide_files/figure-html/spend3-1.png" alt="그림 2.4" width="504" /&gt;
+&lt;p class="caption"&gt;그림 2.4&lt;/p&gt;
 &lt;/div&gt;
 
 ---
@@ -529,11 +529,11 @@ alone_plt +
     hjust = 0, vjust = 0,
     family = 'firasans',
     size = 7) +
-  annotate(
-    'text',  x = 70,  y = 420, 
-    label = 'alone',
-    hjust = 0, vjust = 0, size = 7,
-    family = 'firasans', color = colors[1]) +
+* annotate(
+*   'text',  x = 70,  y = 420,
+*   label = 'alone',
+*   hjust = 0, vjust = 0, size = 7,
+*   family = 'firasans', color = colors[1]) +
   labs(title = 'Label directly') +
   theme(legend.position = 'none')
 ```
@@ -602,16 +602,16 @@ alone_plt +
 
 ```r
 age_40_text &lt;- glue::glue(
-  "Around the age of 40, we spent &lt;br&gt; less time with 
-  &lt;span style = 'color:{colors[2]};'&gt;children&lt;/span&gt; 
+  "Around the age of 40, we spent &lt;br&gt; less time 
+  with &lt;span style = 'color:{colors[2]};'&gt;children&lt;/span&gt; 
   and &lt;br&gt; more time &lt;span style = 'color:{colors[1]};'&gt;alone&lt;/span&gt;."
 )
 age_40_text
 ```
 
 ```
-## Around the age of 40, we spent &lt;br&gt; less time with 
-## &lt;span style = 'color:#009E73;'&gt;children&lt;/span&gt; 
+## Around the age of 40, we spent &lt;br&gt; less time 
+## with &lt;span style = 'color:#009E73;'&gt;children&lt;/span&gt; 
 ## and &lt;br&gt; more time &lt;span style = 'color:#E69F00;'&gt;alone&lt;/span&gt;.
 ```
 
@@ -731,26 +731,36 @@ head(labels)
 
 ## .brand-blue[라벨링 활용하기 III - Visualization]
 
+.pull-left[
+&lt;div class="figure"&gt;
+&lt;img src="coloring_guide_files/figure-html/mpg-add-1.png" alt="그림 3.3" width="504" /&gt;
+&lt;p class="caption"&gt;그림 3.3&lt;/p&gt;
+&lt;/div&gt;
+]
+
+.pull-right[
 
 ```r
 shades_plt2 &lt;- manual_counts %&gt;% 
   ggplot(aes(x = year, y = n, fill = class_group)) +
-  geom_col(aes(alpha = class), col = 'white') +
+* geom_col(aes(alpha = class), col = 'white') +
   scale_fill_manual(values = colors) +
   scale_alpha_manual(values = alpha_vals) +
   labs(
     x = 'Year', y = 'Counts',
     alpha = 'Class', title = 'Label directly'
-  ) 
+  )
+shades_plt2
 ```
+]
 
 ---
 
 ## .brand-blue[라벨링 활용하기 III - Visualization]
 
 &lt;div class="figure"&gt;
-&lt;img src="coloring_guide_files/figure-html/mpg6-1.png" alt="그림 3.3" width="504" /&gt;
-&lt;p class="caption"&gt;그림 3.3&lt;/p&gt;
+&lt;img src="coloring_guide_files/figure-html/mpg6-1.png" alt="그림 3.4" width="504" /&gt;
+&lt;p class="caption"&gt;그림 3.4&lt;/p&gt;
 &lt;/div&gt;
 
 ---

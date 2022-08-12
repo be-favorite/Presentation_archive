@@ -492,7 +492,7 @@ alone_plt +
 
 ## .brand-blue[전달력 높이기 III]
 
-```{r spend3, warning = FALSE, fig.height = 6, fig.retina = 2, fig.cap = "그림 2.3", echo = FALSE}
+```{r spend3, warning = FALSE, fig.height = 6, fig.retina = 2, fig.cap = "그림 2.4", echo = FALSE}
 age_40_plt <- p + 
   gghighlight(
     person %in% c('alone', 'children'), 
@@ -560,7 +560,7 @@ alone_plt +
     size = 7) +
   annotate(
     'text',  x = 70,  y = 420, 
-    label = 'alone', #<<
+    label = 'alone',
     hjust = 0, vjust = 0, size = 7,
     family = 'firasans', color = colors[1]) +
   labs(title = 'Label directly') +
@@ -581,11 +581,11 @@ alone_plt +
     hjust = 0, vjust = 0,
     family = 'firasans',
     size = 7) +
-  annotate(
-    'text',  x = 70,  y = 420, 
-    label = 'alone',
-    hjust = 0, vjust = 0, size = 7,
-    family = 'firasans', color = colors[1]) +
+  annotate( #<<
+    'text',  x = 70,  y = 420, #<<
+    label = 'alone', #<<
+    hjust = 0, vjust = 0, size = 7, #<<
+    family = 'firasans', color = colors[1]) + #<<
   labs(title = 'Label directly') +
   theme(legend.position = 'none')
 ```
@@ -658,8 +658,8 @@ alone_plt +
 
 ```{r}
 age_40_text <- glue::glue(
-  "Around the age of 40, we spent <br> less time with 
-  <span style = 'color:{colors[2]};'>children</span> 
+  "Around the age of 40, we spent <br> less time 
+  with <span style = 'color:{colors[2]};'>children</span> 
   and <br> more time <span style = 'color:{colors[1]};'>alone</span>."
 )
 age_40_text
@@ -788,23 +788,41 @@ head(labels)
 
 ## .brand-blue[라벨링 활용하기 III - Visualization]
 
-```{r}
+.pull-left[
+```{r mpg-add, warning = FALSE, fig.height = 6, fig.retina = 2, fig.cap = "그림 3.3", echo = FALSE}
 shades_plt2 <- manual_counts %>% 
   ggplot(aes(x = year, y = n, fill = class_group)) +
-  geom_col(aes(alpha = class), col = 'white') +
+  geom_col(aes(alpha = class), col = 'white') + #<<
   scale_fill_manual(values = colors) +
   scale_alpha_manual(values = alpha_vals) +
   labs(
     x = 'Year', y = 'Counts',
     alpha = 'Class', title = 'Label directly'
-  ) 
+  )
+shades_plt2
 ```
+]
+
+.pull-right[
+```{r, eval = FALSE}
+shades_plt2 <- manual_counts %>% 
+  ggplot(aes(x = year, y = n, fill = class_group)) +
+  geom_col(aes(alpha = class), col = 'white') + #<<
+  scale_fill_manual(values = colors) +
+  scale_alpha_manual(values = alpha_vals) +
+  labs(
+    x = 'Year', y = 'Counts',
+    alpha = 'Class', title = 'Label directly'
+  )
+shades_plt2
+```
+]
 
 ---
 
 ## .brand-blue[라벨링 활용하기 III - Visualization]
 
-```{r mpg6, warning = FALSE, fig.height = 6, fig.retina = 2, fig.cap = "그림 3.3", echo = FALSE}
+```{r mpg6, warning = FALSE, fig.height = 6, fig.retina = 2, fig.cap = "그림 3.4", echo = FALSE}
 shades_plt2 +
   # Add all but one label
   geom_text(
