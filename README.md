@@ -20,7 +20,7 @@ HTML 형식 파일의 경우 R의 [{xaringan}](https://github.com/yihui/xaringan
 
 ### 슬라이드
 
-- 🔗 [PDF](https://be-favorite.github.io/Presentation_archive/coloring_guide/coloring_guide.html)
+- 🔗 [PDF](https://be-favorite.github.io/Presentation_archive/Datayanolja_2023_Trustworthy_ABtest.pdf)
 
 ## 서울 R 미트업
 
