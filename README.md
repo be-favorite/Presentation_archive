@@ -90,3 +90,16 @@ PDF 형식 자료는 각 슬라이드에 스크롤이 동작하지 않아 몇몇
 ### 슬라이드
 
 - 🔗 [HTML](https://be-favorite.github.io/Presentation_archive/coloring_guide/coloring_guide.html)
+
+## [데이터야놀자 2023](https://event-us.kr/datayanolja2020/event/71715?utm_source=mail&utm_medium=e_remind&utm_campaign=event_remind&utm_content=eventname_btn)
+
+### 이벤트 세부 사항
+**이벤트**: 당신의 A/B Test를 신뢰할 수 없는 이유
+
+**날짜**: 2023년 10월 14일 13:20 - 14:00
+
+**장소**: 역삼 센터필드 EAST 18F AWS Korea
+
+### 슬라이드
+
+- 🔗 [PDF](https://be-favorite.github.io/Presentation_archive/coloring_guide/coloring_guide.html)
