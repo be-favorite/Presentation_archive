@@ -1,108 +1,14 @@
-# Presentation archive
-발표 자료와 강의 자료를 아카이브합니다.
-
-HTML 형식 파일의 경우 R의 [{xaringan}](https://github.com/yihui/xaringan) 패키지로 제작되었습니다.
-
-현재는 [Quarto](https://quarto.org/)를 이용하시기를 권장합니다.
-
-#### Theme, css in {xaringan} slides
-- https://github.com/statisticsplaybook/statisticsplaybook
-- https://github.com/garthtarr/sydney_xaringan
-
-## [데이터야놀자 2023](https://event-us.kr/datayanolja2020/event/71715?utm_source=mail&utm_medium=e_remind&utm_campaign=event_remind&utm_content=eventname_btn)
-
-### 이벤트 세부 사항
-**이벤트**: 당신의 A/B Test를 신뢰할 수 없는 이유
-
-**날짜**: 2023년 10월 14일 13:20 - 14:00
-
-**장소**: 역삼 센터필드 EAST 18F AWS Korea
-
-### 슬라이드
-
-- 🔗 [PDF](https://be-favorite.github.io/Presentation_archive/Datayanolja_2023_Trustworthy_ABtest.pdf)
-
-## 서울 R 미트업
-
-### 이벤트 세부 사항
-**이벤트**: ggplot2 컬러링 가이드: 적은 수의 컬러로 직관적인 시각화를 수행하는 방법
-
-**날짜**: 2022년 8월 12일 10:00 - 10:30
-
-**장소**: 건국대학교 상허연구관 320호
-
-**인원**: 20명
-
-### 슬라이드
-
-- 🔗 [HTML](https://be-favorite.github.io/Presentation_archive/coloring_guide/coloring_guide.html)
-
-
-## 질병관리청 건강보험 청구자료 데이터 교육
-
-### 이벤트 세부 사항
-**이벤트**: DLNM을 이용한 대기오염원 건강영향평가
-
-**날짜**: 2022년 7월 11일 16:30 - 17:00
-
-**장소**: 질병관리청 회의실
-
-**인원**: 6명
-
-### 슬라이드
-
-- 🔗 [HTML](https://be-favorite.github.io/Presentation_archive/kdca_dlnm/kdca_dlnm.html)
-
-## 2022 가천대 길병원 고급통계교육
-
-### 이벤트 세부 사항
-**이벤트**: R을 활용한 통계분석 실습
-
-- 통계실습 I. 회귀분석, ARIMA 모형
-
-- 통계실습 II. 생존분석
-
-- 통계실습 III. 매칭
-
-**날짜**
-
-- 2022년 6월 14일 17:00 - 19:00
-
-- 2022년 6월 21일 17:00 - 19:00
-
-- 2022년 6월 28일 17:00 - 19:00
-
-**장소**: 가천대학교 의과대학 3층 305호 4강의실
-
-**인원**: 12명
-
-### 슬라이드
-PDF 형식 자료는 각 슬라이드에 스크롤이 동작하지 않아 몇몇 내용이 잘리는 한계가 있습니다. 
-
-교육 수강 중 강의자료에 필기를 원하시는 분들을 위해 제공합니다.
-
-#### 통계실습 I. 회귀분석, ARIMA 모형
-- 🔗 [HTML](https://be-favorite.github.io/Presentation_archive/1_regression_arima/1_regression_arima.html#1), [PDF](https://be-favorite.github.io/Presentation_archive/1_regression_arima/1_regression_arima.pdf)
-
-#### 통계실습 II. 생존분석
-- 🔗 [HTML](https://be-favorite.github.io/Presentation_archive/2_survival/2_survival.html#1), [PDF](https://be-favorite.github.io/Presentation_archive/2_survival/2_survival.pdf)
-
-- 🔗 [{survminer} cheatsheet](https://be-favorite.github.io/Presentation_archive/2_survival/survminer_cheatsheet.pdf)
-
-#### 통계실습 III. 매칭
-- 🔗 [HTML](https://be-favorite.github.io/Presentation_archive/3_matching/3_matching.html#1), [PDF](https://be-favorite.github.io/Presentation_archive/3_matching/3_matching.pdf)
-
-## 학술연구 과제 <빅데이터를 이용한 미세먼지 건강영향평가> 연구진 회의
-
-### 이벤트 세부 사항
-**이벤트**: Distributed lag model과 Distributed lag non-linear model 소개
-
-**날짜**: 2021년 6월 21일 18:00 - 19:00
-
-**장소**: Zoom
-
-**인원**: 5명
-
-### 슬라이드
-
-- 🔗 [HTML](https://be-favorite.github.io/Presentation_archive/DLM%2C%20DLNM/Introduction_dlm%2Cdlnm.html), [PDF](https://be-favorite.github.io/Presentation_archive/DLM%2C%20DLNM/Introduction%20to%20DLM%20and%20DLNM.pdf)
+| Tag                                                    | 제목                                                                                                                                                      | 설명                                                                                              | 이벤트                                                                                                                  | 날짜         | 장소                                                                                      |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ---------- | --------------------------------------------------------------------------------------- |
+| Experimentation                                        | [온라인 통제 실험의 모범 사례](https://be-favorite.github.io/Presentation_archive/Korea%20Summer%20Workshop%20ln%20Causal%20Inference_2024_OCEs_Best_Practices.pdf) | A/B 실험의 신뢰도를 보장하기 위해 실험의 라이프사이클 전반에 걸쳐 고려해야할 사항                                                 | [2024 Korea Summer Workshop In Causal Inference](https://sites.google.com/view/causal-inference2024/home?authuser=0) | 2024-06-13 | Zoom                                                                                    |
+| Experimentation, Power Analysis                        | [실험에 기반한 당신의 가설 검정 결과를 신뢰할 수 없는 이유](https://be-favorite.github.io/Presentation_archive/Datayanolja_2024_Power_Analysis.pdf)                             | 수식을 최대한 배제하고 그림을 기반으로 최대한 쉽게 검정력 분석의 본질을 설명하고, 검정력 분석을 둘러싼 오해를 풀고자 함                            | [데이터야놀자 2024](https://datayanolja.kr/)                                                                               | 2024-06-01 | 광화문 마이크로소프트 오피스, Youtube (업로드 예정)                                                       |
+| Experimentation, Delta Method, Mathematical Statistics | [CTR의 분산 추정 중 빠질 수 있는 함정](https://be-favorite.github.io/Presentation_archive/Pseudolab_Pifalls_Variance_Estimation_Ratio_Metrics.pdf)                   | 비율 지표의 정확한 분산 추정을 위한 Delta method 기법 소개                                                         | 가짜연구소 인과추론 팀 행사                                                                                                      | 2024-05-25 | 삼성동 op.gg 사옥                                                                            |
+| Experimentation, Statstics                             | [온라인 통제 실험 소개 및 분석 기초](https://be-favorite.github.io/Presentation_archive/Introduction_to_OCEs.pdf)                                                     | <[실무로 통하는 인과추론 with 파이썬](https://product.kyobobook.co.kr/detail/S000212577153)> 교재 Chapter 2 특강 | 인과추론의 데이터 과학 [실무로 통하는 인과추론]                                                                                          | 2024-05-19 | [Youtube](https://youtu.be/FYTPUnBl-lQ?si=Ww9v_JwkXUbpBjtc)                             |
+| Experimentation, A/A Test                              | [당신의 A/B Test를 신뢰할 수 없는 이유](https://be-favorite.github.io/Presentation_archive/Datayanolja_2023_Trustworthy_ABtest.pdf)                                 | 신뢰도 높은 실험을 위해 우리가 인식해야 할 것들, 우리가 모르고 지나칠 수 있는 함정을 발견할 수 있는 방법                                   | [데이터야놀자 2023](https://datayanolja.kr/)                                                                               | 2023-10-15 | 역삼 센터필드 EAST 18F AWS Korea, [Youtube](https://youtu.be/J4zjwJNYyPM?si=TFYm01c1hDr1rYeL) |
+| Experimentation                                        | 신뢰할 수 있는 온라인 통제 실험의 기초 및 분석 가이드                                                                                                                         | 실험 플랫폼 런칭 후, 실험 오너가 되어 실험 분석을 수행할 수도 있는 분들을 위한 온라인 통제 실험 가이드                                    | G마켓 테크캠퍼스                                                                                                            | 2024-02-28 | Zoom                                                                                    |
+| Visualization, R                                       | [ggplot2 컬러링 가이드](https://be-favorite.github.io/Presentation_archive/coloring_guide/coloring_guide.html#1)                                              | 적은 수의 컬러로 직관적인 시각화를 수행하는 방법                                                                     | 서울 R 미트업                                                                                                             | 2022-08-12 | 건국대학교 상허연구관                                                                             |
+| Time Series, Regression                                | [DLNM을 이용한 대기오염원 건강영향평가](https://be-favorite.github.io/Presentation_archive/kdca_dlnm/kdca_dlnm.html#1)                                                 | 연구 방법론 소개 및 R 실습                                                                                | 질병관리청 건강보험 청구자료 데이터 교육                                                                                               | 2022-07-11 | 가천대학교 의과대학                                                                              |
+| Causal Inference                                       | [통계실습 III. 매칭](https://be-favorite.github.io/Presentation_archive/3_matching/3_matching.html#1)                                                         | 매칭과 Weighting 기초 및 R 실습                                                                         | 가천대 길병원 고급통계교육                                                                                                       | 2022-06-28 | 가천대학교 의과대학                                                                              |
+| Survival Analysis                                      | [통계실습 II. 생존분석](https://be-favorite.github.io/Presentation_archive/2_survival/2_survival.html#1)                                                        | 생존분석 기초 및 R 실습                                                                                  | 가천대 길병원 고급통계교육                                                                                                       | 2022-06-21 | 가천대학교 의과대학                                                                              |
+| Time Series, Regression                                | [통계실습 I. 회귀분석, ARIMA 모형](https://be-favorite.github.io/Presentation_archive/1_regression_arima/1_regression_arima.html#1)                               | 회귀분석과 ARIMA 모형 기초 및 R 실습                                                                        | 가천대 길병원 고급통계교육                                                                                                       | 2022-06-14 | 가천대학교 의과대학                                                                              |
+| Time Series, Regression                                | [Introduction to DLM and DLNM](https://be-favorite.github.io/Presentation_archive/DLM%2C%20DLNM/Introduction_dlm%2Cdlnm.html#1)                         | Distributed lad model과 Distributed lag non-linear model 소개                                      | 학술연구 과제 연구진 회의                                                                                                       | 2021-06-21 | Zoom                                                                                    |
